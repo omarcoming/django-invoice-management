@@ -163,15 +163,10 @@ class InvoiceEditView(EditView):
         else:
             return reverse('invoice-list')
 
+
 class InvoiceCollectionView(FormCollectionView):
     collection_class = InvoiceCollection
     template_name = 'invoice/invoice-collection.html'
-
-    # customer = collection_class.declared_holders.get('customer')
-    # contractor = collection_class.declared_holders.get('contractor')
-    # product = collection_class.declared_holders.get('product')
-    # product_detail = collection_class.declared_holders.get('product_detail')
-    # invoice = collection_class.declared_holders.get('invoice')
 
     customer = CustomerForm()
     contractor = ContractorForm()

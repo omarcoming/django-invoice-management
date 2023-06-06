@@ -20,7 +20,7 @@ class CustomerForm(forms.ModelForm):
             '*': 'mb-1 col-4',
             'city': 'mb-1 col-3',
             'state': 'mb-1 col-1',
-            'customer_notes': 'mb-1 col-8',
+            'customer_notes': 'mb-5 col-12',
         }
     )
 
@@ -204,13 +204,13 @@ class ProductDetailForm(forms.ModelForm):
     default_renderer = FormRenderer(
         form_css_classes='row',
         field_css_classes={
-            'product': 'm-1 col-2',
-            'qty': 'm-1 col-1',
-            'price': 'm-1 col-2',
-            'prod_total': 'm-1 col-2',
-            'block' : 'm-1 col-2',
-            'length': 'm-1 col-1',
-            'width': 'm-1 col-1',
+            'product': 'mb-1 col-2',
+            'qty': 'mb-1 col-1',
+            'price': 'mb-1 col-2',
+            'prod_total': 'mb-1 col-2',
+            'block' : 'mb-1 col-2',
+            'length': 'mb-1 col-1',
+            'width': 'mb-1 col-1',
             # '*': 'm-1 col-2',
         }
     )
@@ -273,10 +273,6 @@ class ProductDetailForm(forms.ModelForm):
         }
 
 class ProductCollection(FormCollection):
-    default_renderer = FormRenderer(
-        collection_css_classes='container',
-        form_css_classes='row',
-    )
 
     extra_siblings = 0
     add_label = 'Add Product'
@@ -363,6 +359,8 @@ class InvoiceForm(forms.ModelForm):
 
 
 class InvoiceCollection(FormCollection):
+
+
     customer = CustomerForm()
     contractor = ContractorForm()
     product = ProductCollection()
