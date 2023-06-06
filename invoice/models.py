@@ -12,7 +12,7 @@ class Customer(models.Model):
     city = models.CharField('City', max_length=55, blank=True)
     state = models.CharField('State', max_length=55, blank=True)
     zip = models.CharField('Zip Code', max_length=9, blank=True)
-    customer_notes = models.TextField(blank=True)
+    customer_notes = models.TextField('Customer Notes', blank=True)
 
     date_created = models.DateTimeField(auto_created=True, null=True, blank=True)
 
@@ -64,7 +64,7 @@ class ProductDetail(models.Model):
     price = models.DecimalField('Price', default=0, decimal_places=2, max_digits=9)
     prod_total = models.DecimalField('Product Total', default=0, decimal_places=2, max_digits=9)
 
-    block = models.CharField('Block #', max_length=55, null=True, blank=True)
+    block = models.CharField('Block No.', max_length=55, null=True, blank=True)
     length = models.DecimalField('Length', default=0, decimal_places=2, max_digits=9, null=True, blank=True)
     width = models.DecimalField('Width', default=0, decimal_places=2, max_digits=9, null=True, blank=True)
 

@@ -5,38 +5,31 @@
 
 <!-- Content Row -->
 {% block content %}
+    <script type="module" src="{% static 'formset/js/django-formset.js' %}"></script>
 
-<script type="module" src="{% static 'formset/js/django-formset.js' %}"></script>
-
-    <div class="row">
-        <!-- Area Chart -->
-        <div class="col-lg-12">
-            <div class="card shadow mb-0">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header">
-                    <a data-toggle="collapse" href="#customer-info" aria-expanded="true"
-                       aria-controls="collapse-example" id="customer-heading" class="d-block">
-                        <label class="m-0 font-weight-bold text-primary">Customer Information</label>
-                        <i class="fa fa-chevron-down pull-left" style="font-size:16px"></i>
-                    </a>
-                </div>
-                <!-- CUSTOMER FORM -->
-                <div id="customer-info" class="card-body collapse show">
-                    {% load render_form from formsetify %}
-                    <django-formset endpoint="{{ request.path }}" csrf-token="{{ csrf_token }}">
-                        {% render_form form %}
-                        {% if add %}
-                            <button type="button" click="submit({add: true}) -> proceed">{% translate "Add" %}</button>
-                        {% else %}
-                            <button type="button" click="submit({update: true}) -> proceed">{% translate "Update" %}</button>
-                            <button type="button" click="submit({delete: true}) -> proceed">{% translate "Delete" %}</button>
-                        {% endif %}
-                    </django-formset>
-
-                </div>
-            </div>
-        </div>
+    <!-- Card Header - Dropdown -->
+    <div class="card-header">
+        <a data-toggle="collapse" href="#customer-info" aria-expanded="true"
+           aria-controls="collapse-example" id="customer-heading" class="d-block">
+            <label class="m-0 font-weight-bold text-primary">Customer Information</label>
+            <i class="fa fa-chevron-down pull-left" style="font-size:16px"></i>
+        </a>
     </div>
+    <!-- CUSTOMER FORM -->
+    <div id="customer-info" class="card-body collapse show">
+        {% load render_form from formsetify %}
+        <django-formset endpoint="{{ request.path }}" csrf-token="{{ csrf_token }}">
+            {% render_form form %}
+
+            {% if add %}
+                <button type="button" click="submit({add: true}) -> proceed">{% translate "Add" %}</button>
+            {% else %}
+                <button type="button" click="submit({update: true}) -> proceed">{% translate "Update" %}</button>
+                <button type="button" click="submit({delete: true}) -> proceed">{% translate "Delete" %}</button>
+            {% endif %}
+        </django-formset>
+    </div>
+
 
 {% endblock %}
 

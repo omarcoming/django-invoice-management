@@ -27,7 +27,7 @@ from .models import *
 #             totalIncome += curr.total
 #         return totalIncome
 
-class EditView(FormView, UpdateView):
+class EditView(FormView):
     def get_object(self, queryset=None):
         if self.extra_context['add'] is False:
             return super().get_object(queryset)
@@ -58,7 +58,7 @@ class CustomerListView(TotalsListView):
     template_name = 'invoice/customer-list.html'
 
 
-class CustomerEditView(EditView):
+class CustomerEditView(EditView, UpdateView):
     model = Customer
     template_name = 'invoice/customer_add.html'
     form_class = CustomerForm
@@ -71,12 +71,18 @@ class CustomerEditView(EditView):
             return reverse('customer-list')
 
 
+class CustomerCollectionView(FormCollectionView):
+
+    collection_class = CustomerCollection
+    template_name = 'invoice/customer-collection.html'
+
+
 class ProductListView(TotalsListView):
     model = Product
     template_name = 'invoice/product-list.html'
 
 
-class ProductEditView(EditView):
+class ProductEditView(EditView, UpdateView):
     model = Product
     template_name = 'invoice/product-add.html'
     form_class = ProductForm
@@ -94,7 +100,7 @@ class ProductDetailListView(TotalsListView):
     template_name = 'invoice/prodetail-list.html'
 
 
-class ProductDetailEditView(FormView, UpdateView):
+class ProductDetailEditView(EditView, UpdateView):
     model = ProductDetail
     template_name = 'invoice/prodetail-add.html'
     form_class = ProductDetailForm
@@ -111,8 +117,8 @@ class ProductCollectionView(FormCollectionView):
     collection_class = ProductCollection
     template_name = 'invoice/product-collection.html'
 
-    product = collection_class.declared_holders.get('product')
-    product_detail = collection_class.declared_holders.get('product_detail')
+    # product = collection_class.declared_holders.get('product')
+    # product_detail = collection_class.declared_holders.get('product_detail')
     success_url = 'success'
     print('')
 
@@ -133,7 +139,7 @@ class ContractorListView(TotalsListView):
     template_name = 'invoice/contractor-list.html'
 
 
-class ContractorEditView(EditView):
+class ContractorEditView(EditView, UpdateView):
     model = Contractor
     template_name = 'invoice/contractor-add.html'
     form_class = ContractorForm
@@ -151,7 +157,7 @@ class InvoiceListView(TotalsListView):
     template_name = 'invoice/invoice-list.html'
 
 
-class InvoiceEditView(EditView):
+class InvoiceEditView(EditView, UpdateView):
     model = Invoice
     template_name = 'invoice/invoice-add.html'
     form_class = InvoiceForm

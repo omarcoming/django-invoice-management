@@ -2,9 +2,9 @@
 {% load i18n %}
 {% load static %}
 
-{% block head_script %}
-    <script type="module" src="{% static 'js/calculate.js' %}"></script>
-{% endblock %}
+{#{% block head_script %}#}
+{#    <script type="module" src="{% static 'js/calculate.js' %}"></script>#}
+{#{% endblock %}#}
 
 
 {% block content %}
@@ -22,7 +22,7 @@
     </div>
     {% load render_form from formsetify %}
     <!-- INVOICE COLLECTION FORM -->
-    <div id="invoice-info" class="card-body collapse show">
+    <div id="#invoice-colllection-info" class="card-body collapse show" >
         <django-formset endpoint="{{ request.path }}" csrf-token="{{ csrf_token }}">
             {{ form_collection }}
 
@@ -38,6 +38,7 @@
 
         </django-formset>
     </div>
+
 
 {% endblock %}
 
@@ -68,17 +69,29 @@
             }
         };
 
+        function addDecimal() {
+            var all_price = document.getElementsByName('price');
+            var len = all_price.length;
+            for (let i = 0; i < len; i++) {
+                var price = parseFloat(all_price[i].value);
+                all_price[i].value = price.toFixed(2);
+            }
+        };
+
+        function addDecimalToDeposit() {
+            var deposit = parseFloat(document.getElementById('deposit').value);
+            document.getElementById('deposit').value = deposit.toFixed(2);
+        };
+
         function calculateProductTotal() {
             var all_qty = document.getElementsByName('qty');
             var all_price = document.getElementsByName('price');
             var all_total = document.getElementsByName('prod_total');
             var len = all_qty.length;
-            console.log(all_qty)
-            console.log(all_price)
-            console.log(all_total)
+
             for (let i = 0; i < len; i++) {
                 var total = parseFloat(all_qty[i].value) * parseFloat(all_price[i].value);
-                all_total[i].value = total.toFixed(2)
+                all_total[i].value = total.toFixed(2);
                 calculateSubTotal();
                 calculateTax();
                 calculateBalance();

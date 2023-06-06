@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.forms import fields, ModelForm
 from django import forms
 from django.forms import formset_factory, modelformset_factory, inlineformset_factory
 from django.forms.models import construct_instance, model_to_dict
@@ -8,21 +9,151 @@ from django.contrib import admin
 
 from formset.collection import FormCollection
 from formset.renderers.bootstrap import FormRenderer
+from formset.fieldset import Fieldset, FieldsetMixin
 from formset.utils import FormMixin
 from formset.widgets import Selectize
 from .models import *
 
 
-class CustomerForm(forms.ModelForm):
+# class CustomerForm(Fieldset):
+#     legend = 'Customer'
+#
+#     default_renderer = FormRenderer(
+#         fieldset_css_classes='row',
+#         field_css_classes={
+#             '*': 'mb-1 col-4',
+#             'city': 'mb-1 col-3',
+#             'state': 'mb-1 col-1',
+#             'customer_notes': 'mb-5 col-12',
+#         }
+#     )
+#     first_name = forms.CharField(
+#         required=False,
+#         widget=forms.TextInput(
+#             attrs={
+#                 'class': 'form-control',
+#                 'id': 'first_name',
+#                 'placeholder': 'Customer First Name',
+#             })
+#     )
+#     last_name = forms.CharField(
+#         required=False,
+#         widget=forms.TextInput(
+#             attrs={
+#                 'class': 'form-control',
+#                 'id': 'last_name',
+#                 'placeholder': 'Customer Last Name',
+#             })
+#     )
+#     phone = forms.CharField(
+#         required=False,
+#         widget=forms.NumberInput(
+#             attrs={
+#                 'class': 'form-control',
+#                 'id': 'phone',
+#             })
+#     )
+#     alt_phone = forms.CharField(
+#         required=False,
+#         widget=forms.NumberInput(
+#             attrs={
+#                 'class': 'form-control',
+#                 'id': 'phone',
+#             })
+#     )
+#
+#     company = forms.CharField(
+#         required=False,
+#         widget=forms.TextInput(
+#             attrs={
+#                 'class': 'form-control',
+#                 'id': 'company',
+#             })
+#     )
+#
+#     email = forms.EmailField(
+#         required=False,
+#         widget=forms.EmailInput(
+#             attrs={
+#                 'class': 'form-control',
+#                 'id': 'email',
+#             })
+#     )
+#
+#     address = forms.CharField(
+#         required=False,
+#         widget=forms.TextInput(
+#             attrs={
+#                 'class': 'form-control',
+#                 'id': 'address',
+#             })
+#     )
+#
+#     city = forms.CharField(
+#         required=False,
+#         widget=forms.TextInput(
+#             attrs={
+#                 'class': 'form-control',
+#                 'id': 'city',
+#             })
+#     )
+#
+#     state = forms.CharField(
+#         required=False,
+#         widget=forms.TextInput(
+#             attrs={
+#                 'class': 'form-control',
+#                 'id': 'state',
+#                 'value': 'CA',
+#             })
+#     )
+#
+#     zip = forms.CharField(
+#         required=False,
+#         widget=forms.TextInput(
+#             attrs={
+#                 'class': 'form-control',
+#                 'id': 'zip',
+#             })
+#     )
+#
+#     customer_notes = forms.CharField(
+#         required=False,
+#         widget=forms.Textarea(
+#             attrs={
+#                 'class': 'form-control',
+#                 'id': 'customer_notes',
+#                 'placeholder': 'Enter customer notes',
+#                 'rows': '1'
+#             })
+#     )
+#
+#     date_created = forms.CharField(
+#         required=False,
+#         widget=forms.DateTimeInput(
+#             attrs={
+#                 'class': 'form-control',
+#                 'id': 'date_created',
+#                 'value': datetime.now(),
+#                 'hidden': True,
+#             }),
+#         label=False,
+#     )
+
+
+class CustomerForm(ModelForm):
     default_renderer = FormRenderer(
-        form_css_classes='row',
+        form_css_classes='row border p-1 m-1',
         field_css_classes={
             '*': 'mb-1 col-4',
             'city': 'mb-1 col-3',
             'state': 'mb-1 col-1',
-            'customer_notes': 'mb-5 col-12',
-        }
+            'customer_notes': 'mb-1 col-12',
+            'extant': 'mb-5'
+        },
     )
+    legend = 'Customer'
+    hide_if = 'ext_customer.extant'
 
     class Meta:
         model = Customer
@@ -50,11 +181,11 @@ class CustomerForm(forms.ModelForm):
                 'id': 'last_name',
                 'placeholder': 'Customer Last Name',
             }),
-            'phone': forms.TextInput(attrs={
+            'phone': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'id': 'phone',
             }),
-            'alt_phone': forms.TextInput(attrs={
+            'alt_phone': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'id': 'alt_phone',
             }),
@@ -77,6 +208,7 @@ class CustomerForm(forms.ModelForm):
             'state': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'state',
+                'value': 'CA',
             }),
             'zip': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -95,14 +227,36 @@ class CustomerForm(forms.ModelForm):
             })
         }
 
-class ContractorForm(forms.ModelForm):
+
+class ExtantCustomerForm(forms.Form):
+    extant = fields.BooleanField(
+        label='Existing Customer?',
+        required=False,
+    )
     default_renderer = FormRenderer(
-        form_css_classes='row',
+        field_css_classes={
+            '*': 'mb-3'
+        },
+    )
+
+
+class CustomerCollection(FormCollection):
+    customer = CustomerForm()
+    ext_customer = ExtantCustomerForm()
+    legend = 'Customer'
+
+
+
+class ContractorForm(ModelForm):
+    default_renderer = FormRenderer(
+        form_css_classes='row border p-1 m-1',
         field_css_classes={
             '*': 'mb-1 col-3',
             'contractor_notes': 'mb-1 col-9',
         }
     )
+    legend = 'Contractor'
+    hide_if = 'ext_contractor.extant'
 
     class Meta:
         model = Contractor
@@ -154,7 +308,26 @@ class ContractorForm(forms.ModelForm):
             })
         }
 
-class ProductForm(forms.ModelForm):
+
+class ExtantContractorForm(forms.Form):
+    extant = fields.BooleanField(
+        label='Working with contractor?',
+        required=False,
+    )
+    default_renderer = FormRenderer(
+        field_css_classes={
+            '*': 'mb-3'
+        },
+    )
+
+
+class ContractorCollection(FormCollection):
+    contractor = ContractorForm()
+    ext_contractor = ExtantContractorForm()
+    legend = 'Contractor'
+
+
+class ProductForm(ModelForm):
     id = forms.IntegerField(required=False, widget=forms.HiddenInput)
     default_renderer = FormRenderer(
         form_css_classes='row',
@@ -199,16 +372,16 @@ class ProductForm(forms.ModelForm):
         }
 
 
-class ProductDetailForm(forms.ModelForm):
+class ProductDetailForm(ModelForm):
     id = forms.IntegerField(required=False, widget=forms.HiddenInput)
     default_renderer = FormRenderer(
         form_css_classes='row',
         field_css_classes={
             'product': 'mb-1 col-2',
-            'qty': 'mb-1 col-1',
+            'qty': 'mb-1 col-2',
             'price': 'mb-1 col-2',
             'prod_total': 'mb-1 col-2',
-            'block' : 'mb-1 col-2',
+            'block': 'mb-1 col-2',
             'length': 'mb-1 col-1',
             'width': 'mb-1 col-1',
             # '*': 'm-1 col-2',
@@ -248,7 +421,8 @@ class ProductDetailForm(forms.ModelForm):
                 'class': 'form-control product-input price-product',
                 'id': 'product_price',
                 'type': 'number',
-                'oninput': 'calculateProductTotal()'
+                'oninput': 'calculateProductTotal()',
+                'onblur': 'addDecimal()',
             }),
             'prod_total': forms.NumberInput(attrs={
                 'class': 'form-control product-input total-product',
@@ -272,15 +446,15 @@ class ProductDetailForm(forms.ModelForm):
             })
         }
 
-class ProductCollection(FormCollection):
 
+class ProductCollection(FormCollection):
     extra_siblings = 0
     add_label = 'Add Product'
     # product = ProductForm()
     product_detail = ProductDetailForm()
 
 
-class InvoiceForm(forms.ModelForm):
+class InvoiceForm(ModelForm):
     id = forms.IntegerField(required=False, widget=forms.HiddenInput)
     default_renderer = FormRenderer(
         form_css_classes='row',
@@ -340,7 +514,8 @@ class InvoiceForm(forms.ModelForm):
                 'default': '0.00',
                 'type': 'number',
                 'oninput': 'calculateBalance()',
-                'step': '0.00'
+                'step': '0.00',
+                'onblur': 'addDecimalToDeposit()',
             }),
             'balance': forms.NumberInput(attrs={
                 'class': 'form-control',
@@ -359,9 +534,7 @@ class InvoiceForm(forms.ModelForm):
 
 
 class InvoiceCollection(FormCollection):
-
-
-    customer = CustomerForm()
-    contractor = ContractorForm()
+    customer = CustomerCollection()
+    contractor = ContractorCollection()
     product = ProductCollection()
     invoice = InvoiceForm()

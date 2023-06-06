@@ -3,10 +3,14 @@ from django.urls import path, re_path
 from .views import *
 
 urlpatterns = [
-    path('', CustomerListView.as_view(), name='home'),
+    path('', InvoiceCollectionView.as_view(), name='home'),
     path('customers', CustomerListView.as_view(), name='customer-list'),  # list view not handled here
     path('customer/add/', CustomerEditView.as_view(extra_context={'add': True}), name='customer-add', ),
     path('customer/<int:pk>/', CustomerEditView.as_view(extra_context={'add': False}), name='customer-edit', ),
+
+    path('cc', CustomerListView.as_view(), name='cc-list'),  # list view not handled here
+    path('cc/add/', CustomerCollectionView.as_view(extra_context={'add': True}), name='cc-add', ),
+    path('cc/<int:pk>/', CustomerCollectionView.as_view(extra_context={'add': False}), name='cc-edit', ),
 
     path('contractors', ContractorListView.as_view(), name='contractor-list'),  # list view not handled here
     path('contractor/add/', ContractorEditView.as_view(extra_context={'add': True}), name='contractor-add', ),
