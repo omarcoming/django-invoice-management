@@ -6,19 +6,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-
     <title>Invoice Management</title>
 
     <link href="{% static '/css/sb-admin-2.css' %}" rel="stylesheet"></link>
     <!-- bootstrap5 css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-
     <link href="{% static '/css/style.css' %}" rel="stylesheet">
-
-
 </head>
-
 
 <body id="page-top">
 <!-- FONT AWESOME -->
@@ -30,107 +25,108 @@
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
         crossorigin="anonymous"></script>
 
-
 <!-- Page Wrapper -->
 <div id="wrapper">
-    <!-- Sidebar -->
     <div class="container-fluid">
         <div class="row flex-sm-nowrap">
+            <!-- Sidebar -->
             <div class="col-auto px-sm-1 px-0 bg-gray-800">
                 <div class="d-flex flex-column align-items-center px-3 pt-2 text-white min-vh-100">
+                    <!-- LOGO -->
                     <a href="/"
-                       class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                        <div class="sidebar-brand-icon align-items-center text-center">
-                            <img src="{% static '/img/logo.png' %}" width="85px" height="85px" alt="logo" class="rounded mx-auto">
+                       class="d-flex align-items-center p-0 mb-md-0 me-md-auto text-white text-decoration-none">
+                        <div class="sidebar-brand-icon text-center">
+                            <img src="{% static '/img/logo.png' %}" width="120px" height="120px" alt="logo"
+                                 class="rounded mx-auto">
                         </div>
                     </a>
-                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-sm-start"
+                    <hr class="divider">
+
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-4 align-items-sm-start"
                         id="menu">
+                        <!-- CREATE INVOICE -->
                         <li class="nav-item active">
-                            <a href="{% url 'home' %}" class="nav-link align-middle px-0 text-white">
-                                <i class="fas fa-cash-register"></i>
+                            <a href="{% url 'home' %}" class="nav-link align-middle px-0 pb-4 text-white">
+                                <i class="fas fa-pen-to-square"></i>
                                 <span>Create Invoice</span>
                             </a>
                         </li>
+
+                        <hr class="divider">
+                        <!-- INVOICES -->
                         <li class="nav-item">
-                            <a href="#submenu1" class="nav-link collapsed px-0 align-middle text-white" data-bs-toggle="collapse"
-                               data-bs-target="#collapseProduct" aria-expanded="true" aria-controls="collapseProduct">
-                                <i class="fas fa-folder-open"></i>
-                                <span>Products</span>
-                            </a>
-                            <div id="collapseProduct" class="collapse nav flex-column ms-1" data-bs-parent="#menu">
-                                <div class="bg-gray-500 collapse-inner rounded">
-                                    <a class="nav-link" href="{% url 'product-add' %}">Add</a>
-                                    <a class="nav-link" href="{% url 'product-list' %}">View List</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#submenu2" class="nav-link collapsed px-0 align-middle text-white" data-bs-toggle="collapse"
-                               data-bs-target="#collapseCustomer" aria-expanded="true" aria-controls="collapseCustomer">
-                                <i class="fas fa-user-circle"></i>
-                                <span>Customers</span>
-                            </a>
-                            <div id="collapseCustomer" class="collapse nav flex-column ms-1" data-bs-parent="#menu">
-                                <div class="bg-white py-2 collapse-inner rounded">
-                                    <a class="nav-link text-black" href="{% url 'customer-add' %}">Add</a>
-                                    <a class="nav-link" href="{% url 'customer-list' %}">View List</a>
-                                </div>
+                            <div class="dropdown pb-4">
+                                <a href="#submenu1"
+                                   class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                                   id="dropdown-product" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-money-check-dollar"></i>
+                                    <span class="d-none d-sm-inline mx-1">Invoices</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                                    <li><a class="dropdown-item" href="{% url 'invoice-add' %}">Add</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'invoice-list' %}">View List</a></li>
+                                </ul>
                             </div>
                         </li>
 
+                        <!-- PRODUCTS -->
+                        <li class="nav-item">
+                            <div class="dropdown pb-4">
+                                <a href="#submenu2"
+                                   class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                                   id="dropdown-product" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-boxes-packing"></i>
+                                    {#                                    fa-folder-open#}
+                                    <span class="d-none d-sm-inline mx-1">Products</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                                    <li><a class="dropdown-item" href="{% url 'product-add' %}">Add</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'product-list' %}">View List</a></li>
+                                </ul>
+                            </div>
+                        </li>
 
+                        <!-- CUSTOMERS -->
+                        <li class="nav-item">
+                            <div class="dropdown pb-4">
+                                <a href="#submenu3"
+                                   class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                                   id="dropdown-product" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-address-card"></i>
+                                    <span class="d-none d-sm-inline mx-1">Customers</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                                    <li><a class="dropdown-item" href="{% url 'customer-add' %}">Add</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'customer-list' %}">View List</a></li>
+                                </ul>
+                            </div>
+                        </li>
 
-                        <li>
-                            <a href="#" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-table"></i>
-                                <span class="ms-1 d-none d-sm-inline">Customers</span></a>
+                        <!-- CONTRACTORS -->
+                        <li class="nav-item">
+                            <div class="dropdown pb-4">
+                                <a href="#submenu4"
+                                   class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                                   id="dropdown-product" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-building-user"></i>
+                                    <span class="d-none d-sm-inline mx-1">Contractors</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                                    <li><a class="dropdown-item" href="{% url 'contractor-add' %}">Add</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'contractor-list' %}">View List</a></li>
+                                </ul>
+                            </div>
                         </li>
-                        <li>
-                            <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                                <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Bootstrap</span></a>
-                            <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
-                                <li class="w-100">
-                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span>
-                                        1</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span>
-                                        2</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Products</span> </a>
-                            <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                                <li class="w-100">
-                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 1</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 2</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 3</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 4</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customers</span>
-                            </a>
-                        </li>
+
                     </ul>
                     <hr>
                     <div class="dropdown pb-4">
                         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                            id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30"
-                                 class="rounded-circle">
-                            <span class="d-none d-sm-inline mx-1">loser</span>
+                            {#                            <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30"#}
+                            {#                                 class="rounded-circle">#}
+                            <i class="fa-solid fa-circle-user"></i>
+                            <span class="d-none d-sm-inline mx-1">User</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
                             <li><a class="dropdown-item" href="#">New project...</a></li>
@@ -144,126 +140,54 @@
                     </div>
                 </div>
             </div>
+            <!-- End of Sidebar -->
+            <div class="col-sm-10">
+                <div class="card w-100 shadow my-2">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% comment %}
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+    <!-- Sidebar Message -->
+    {% comment %}
+    <div class="sidebar-card">
+        <img class="sidebar-card-illustration mb-2" src="{% static 'img/undraw_rocket.svg' %}" alt="">
+        <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
+        <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
+    </div>
+    {% endcomment %}
+
+</div>
 
 
-            {#            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled"#}
-            {#                id="accordionSidebar">#}
-            {##}
-            {#                <!-- Sidebar - Brand -->#}
-            {#                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'home' %}">#}
-            {#                    <div class="sidebar-brand-icon">#}
-            {#                        <img src="{% static '/img/logo.png' %}" alt="logo" width="85px" height="85px">#}
-            {#                    </div>#}
-            {#                </a>#}
-            {##}
-            {##}
-            {#                <!-- Divider -->#}
-            {#                <hr class="sidebar-divider my-0">#}
-            {#                <!-- Nav Item - Dashboard -->#}
-            {#                <li class="nav-item">#}
-            {#                    <a class="nav-link active" href="{% url 'home' %}">#}
-            {#                        <i class="fas fa-cash-register"></i>#}
-            {#                        <span>Create Invoice</span></a>#}
-            {#                </li>#}
-            {##}
-            {##}
-            {#                <!-- Divider -->#}
-            {#                <hr class="sidebar-divider">#}
-            {##}
-            {#                <!-- Nav Item - Pages Collapse Menu -->#}
-            {#                <li class="nav-item">#}
-            {#                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseProduct"#}
-            {#                       aria-expanded="true" aria-controls="collapseProduct">#}
-            {#                        <i class="fas fa-folder-open"></i>#}
-            {#                        <span>Products</span>#}
-            {#                    </a>#}
-            {#                    <div id="collapseProduct" class="collapse" aria-labelledby="headingTwo"#}
-            {#                         data-bs-parent="#accordionSidebar">#}
-            {#                        <div class="bg-white py-2 collapse-inner rounded">#}
-            {#                            <a class="collapse-item" href="{% url 'product-add' %}">Add</a>#}
-            {##}
-            {#                    <a class="collapse-item" href="{% url 'upload_product_excel' %}">Upload Excel</a>#}
-            {##}
-            {#                            <a class="collapse-item" href="{% url 'product-list' %}">View List</a>#}
-            {#                        </div>#}
-            {#                    </div>#}
-            {##}
-            {#                </li>#}
-            {##}
-            {#                <!-- Nav Item - Utilities Collapse Menu -->#}
-            {#                <li class="nav-item">#}
-            {#                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCustomer"#}
-            {#                       aria-expanded="true" aria-controls="collapseCustomer">#}
-            {#                        <i class="fas fa-user-circle"></i>#}
-            {#                        <span>Customers</span>#}
-            {#                    </a>#}
-            {#                    <div id="collapseCustomer" class="collapse" aria-labelledby="headingUtils"#}
-            {#                         data-bs-parent="#accordionSidebar">#}
-            {#                        <div class="bg-white py-2 collapse-inner rounded">#}
-            {#                            <a class="collapse-item" href="{% url 'customer-add' %}">Add</a>#}
-            {##}
-            {#                            <a class="collapse-item" href="{% url 'customer-list' %}">List</a>#}
-            {#                        </div>#}
-            {#                    </div>#}
-            {#                </li>#}
-            {##}
-            {##}
-            {#                <!-- Nav Item - Pages Collapse Menu -->#}
-            {#                <li class="nav-item">#}
-            {#                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseInvoices"#}
-            {#                       aria-expanded="true" aria-controls="collapseInvoices">#}
-            {#                        <i class="fas fa-cart-plus"></i>#}
-            {#                        <span>Invoices</span>#}
-            {#                    </a>#}
-            {#                    <div id="collapseInvoices" class="collapse" aria-labelledby="headingPages"#}
-            {#                         data-bs-parent="#accordionSidebar">#}
-            {#                        <div class="bg-white py-2 collapse-inner rounded">#}
-            {#                    <a class="collapse-item" href="{% url 'create_invoice' %}">Add</a>#}
-            {#                    <a class="collapse-item" href="{% url 'view_invoice' %}">View</a>#}
-            {#                    <a class="collapse-item" href="{% url 'download_all_invoice' %}">Download</a>#}
-            {#                    <a class="collapse-item" href="{% url 'delete_all_invoice' %}">Delete</a>#}
-            {##}
-            {#                        </div>#}
-            {#                    </div>#}
-            {#                </li>#}
-            {##}
-            {#                <!-- Divider -->#}
-            {#                <hr class="sidebar-divider">#}
-            {##}
-            {#                <!-- Sidebar Toggler (Sidebar) -->#}
-            {#                <div class="text-center d-none d-md-inline">#}
-            {#                    <button class="rounded-circle border-0" id="sidebarToggle"></button>#}
-            {#                </div>#}
-            {##}
-            {#                <!-- Sidebar Message -->#}
-            {#                {% comment %} <div class="sidebar-card">#}
-            {#                <img class="sidebar-card-illustration mb-2" src="{% static 'img/undraw_rocket.svg' %}" alt="">#}
-            {#                <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>#}
-            {#                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>#}
-            {#            </div> {% endcomment %}#}
-            {##}
-            {#            </ul>#}
-            {#        </div>#}
-            {#        <!-- End of Sidebar -->#}
-            {#    </nav>#}
+{% comment %}
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
 
-            <!-- Content Wrapper -->
-            <div id="content-wrapper" class="d-flex flex-column">
+    <!-- Main Content -->
+    <div id="content">
 
-                <!-- Main Content -->
-                <div id="content">
+        <!-- Topbar (The White Space Up Top) -->
+        {#<nav class="navbar navbar-expand navbar-light bg-white topbar mb-sm-1 static-top shadow" style="height:35px">#}
+        <!-- Sidebar Toggle (Topbar) -->
+        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+        </button>
+        {#</nav>#}
+        <!-- End of Topbar -->
 
-                    <!-- Topbar (The White Space Up Top) -->
-                    {#<nav class="navbar navbar-expand navbar-light bg-white topbar mb-sm-1 static-top shadow" style="height:35px">#}
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-                    {#</nav>#}
-                    <!-- End of Topbar -->
-
+        {% comment %}
                     <!-- Begin Page Content - Total Cards -->
-
                     <a data-toggle="collapse" href="#summary-cards" aria-expanded="true"
                        aria-controls="collapse-example" id="summary-collapse" class="d-block">
                         <label class="m-0 font-weight-bold text-primary"></label>
@@ -365,7 +289,7 @@
                     <!-- Content Row -->
                     <!-- product_detail_formset.media -->
 
-                    {% block content %}{% endblock %}
+                    {#                    {% block content %}{% endblock %}#}
 
                     {% block invoice_content %}{% endblock %}
 
@@ -385,20 +309,20 @@
 
             </div>
             <!-- End of Content Wrapper -->
+{% endcomment %}
+</div>
+<!-- End of Page Wrapper -->
 
-        </div>
-        <!-- End of Page Wrapper -->
-
-        <!-- Scroll to Top Button-->
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
-
-
-        {% block head_script %}{% endblock %}
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
 
 
-        {% block custom_js %}{% endblock %}
+{% block head_script %}{% endblock %}
+
+
+{% block custom_js %}{% endblock %}
 
 </body>
 

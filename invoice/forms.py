@@ -20,7 +20,7 @@ class CustomerForm(forms.ModelForm):
             '*': 'mb-1 col-4',
             'city': 'mb-1 col-3',
             'state': 'mb-1 col-1',
-            'customer_notes': 'mb-1 col-12',
+            'customer_notes': 'mb-1 col-8',
         }
     )
 
@@ -86,7 +86,7 @@ class CustomerForm(forms.ModelForm):
                 'class': 'form-control',
                 'id': 'customer_notes',
                 'placeholder': 'Enter customer notes',
-                'rows': '2'
+                'rows': '1'
             }),
             'date_created': forms.DateTimeInput(attrs={
                 'class': 'form-control',
@@ -95,17 +95,75 @@ class CustomerForm(forms.ModelForm):
             })
         }
 
+class ContractorForm(forms.ModelForm):
+    default_renderer = FormRenderer(
+        form_css_classes='row',
+        field_css_classes={
+            '*': 'mb-1 col-3',
+            'contractor_notes': 'mb-1 col-9',
+        }
+    )
+
+    class Meta:
+        model = Contractor
+        fields = [
+            'contractor_first_name',
+            'contractor_last_name',
+            'contractor_phone',
+            'contractor_email',
+            'contractor_company',
+            'contractor_notes',
+        ]
+        widgets = {
+            'contractor_first_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'contractor_first_name',
+                'placeholder': 'First Name',
+            }),
+            'contractor_last_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'contractor_last_name',
+                'placeholder': 'Last Name',
+            }),
+            'contractor_phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'contractor_phone',
+            }),
+            # 'alt_phone': forms.TextInput(attrs={
+            #     'class': 'form-control',
+            #     'id': 'alt_phone',
+            # }),
+            'contractor_company': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'contractor_company',
+            }),
+            'contractor_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'id': 'contractor_email',
+            }),
+            'contractor_notes': forms.Textarea(attrs={
+                'class': 'form-control',
+                'id': 'contractor_notes',
+                'placeholder': 'Enter contractor notes',
+                'rows': '1'
+            }),
+            'date_created': forms.DateTimeInput(attrs={
+                'class': 'form-control',
+                'id': 'date_created',
+                'value': datetime.now()
+            })
+        }
 
 class ProductForm(forms.ModelForm):
     id = forms.IntegerField(required=False, widget=forms.HiddenInput)
-    # default_renderer = FormRenderer(
-    #     form_css_classes='row',
-    #     field_css_classes={
-    #         'unit': 'mb-1 col-1',
-    #         'prod_name': 'mb-1 col-3',
-    #         '*': 'mb-1 col-2',
-    #     }
-    # )
+    default_renderer = FormRenderer(
+        form_css_classes='row',
+        field_css_classes={
+            'unit': 'm-1 col-1',
+            'prod_name': 'm-1 col-3',
+            '*': 'm-1 col-2',
+        }
+    )
 
     class Meta:
         model = Product
@@ -143,19 +201,19 @@ class ProductForm(forms.ModelForm):
 
 class ProductDetailForm(forms.ModelForm):
     id = forms.IntegerField(required=False, widget=forms.HiddenInput)
-    # default_renderer = FormRenderer(
-    #     form_css_classes='row',
-    #     field_css_classes={
-    #         'product': 'mb-1 col-2',
-    #         'qty': 'mb-1 col-1',
-    #         'price': 'mb-1 col-2',
-    #         'prod_total': 'mb-1 col-2',
-    #         'block' : 'mb-1 col-2',
-    #         'length': 'mb-1 col-1',
-    #         'width': 'mb-1 col-1',
-    #         # '*': 'mb-1 col-2',
-    #     }
-    # )
+    default_renderer = FormRenderer(
+        form_css_classes='row',
+        field_css_classes={
+            'product': 'm-1 col-2',
+            'qty': 'm-1 col-1',
+            'price': 'm-1 col-2',
+            'prod_total': 'm-1 col-2',
+            'block' : 'm-1 col-2',
+            'length': 'm-1 col-1',
+            'width': 'm-1 col-1',
+            # '*': 'm-1 col-2',
+        }
+    )
 
     class Meta:
         model = ProductDetail
@@ -218,44 +276,94 @@ class ProductCollection(FormCollection):
     default_renderer = FormRenderer(
         collection_css_classes='container',
         form_css_classes='row',
-        field_css_classes={
-            'qty': 'mb-1 col-1',
-            'unit'    : 'mb-1 col-1',
-            'product': 'mb-1 col-2',
-            'material': 'mb-1 col-2',
-            # 'vendor'  : 'mb-1 col-2',
-            'price'   : 'mb-1 col-1',
-            'prod_total'   : 'mb-1 col-2',
-            'block': 'mb-1 col-1',
-            'length': 'mb-1 col-1',
-            'width': 'mb-1 col-1',
-            # '*': 'mb-1 col-2',
-            },
     )
 
     extra_siblings = 0
     add_label = 'Add Product'
-
-    product = ProductForm()
+    # product = ProductForm()
     product_detail = ProductDetailForm()
 
-# class ProductCollection(FormCollection, FormMixin):
-#     default_renderer = FormRenderer(
-#         collection_css_classes='row',
-#         field_css_classes={
-#             'qty': 'mb-1 col-1',
-#             'unit'    : 'mb-1 col-1',
-#             'product': 'mb-1 col-2',
-#             'material': 'mb-1 col-2',
-#             # 'vendor'  : 'mb-1 col-2',
-#             'price'   : 'mb-1 col-2',
-#             'prod_total'   : 'mb-1 col-2',
-#             '*': 'mb-1 col-2',
-#             },
-#     )
-#
-#     extra_siblings = 0
-#     add_label = 'Add Product'
-#
-#     product = ProductForm()
-#     product_detail = ProductDetailForm()
+
+class InvoiceForm(forms.ModelForm):
+    id = forms.IntegerField(required=False, widget=forms.HiddenInput)
+    default_renderer = FormRenderer(
+        form_css_classes='row',
+        field_css_classes={'*': 'mb-1 col-4',
+                           'invoice_notes': 'mb-1 col-8'}
+    )
+
+    class Meta:
+        model = Invoice
+        fields = [
+            'payment_type',
+            'deposit',
+            'subtotal',
+            'payment_status',
+            'balance',
+            'tax',
+            'invoice_notes',
+            'total',
+            'customer',
+            'id',
+        ]
+        exclude = ['customer']
+        widgets = {
+            'payment_type': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'payment_type',
+                'placeholder': 'Check',
+            }),
+            'payment_status': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'payment_status',
+                'placeholder': 'PAID',
+            }),
+            'subtotal': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'id': 'subtotal',
+                'placeholder': '0.00',
+                'type': 'number',
+                'readonly': 'True',
+            }),
+            'tax': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'id': 'tax',
+                'type': 'number',
+                'readonly': 'True'
+            }),
+            'total': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'id': 'total',
+                'placeholder': '0.00',
+                'type': 'number',
+                'readonly': 'True',
+            }),
+            'deposit': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'id': 'deposit',
+                'default': '0.00',
+                'type': 'number',
+                'oninput': 'calculateBalance()',
+                'step': '0.00'
+            }),
+            'balance': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'id': 'balance',
+                'placeholder': '0.00',
+                'type': 'number',
+                'readonly': 'True'
+            }),
+            'invoice_notes': forms.Textarea(attrs={
+                'class': 'form-control',
+                'id': 'invoice_notes',
+                'placeholder': 'Enter notes',
+                'rows': '1'
+            }),
+        }
+
+
+class InvoiceCollection(FormCollection):
+    customer = CustomerForm()
+    contractor = ContractorForm()
+    product = ProductCollection()
+    invoice = InvoiceForm()
