@@ -1,0 +1,21 @@
+TYPOS = {
+    ('TAJI MAJAL'): 'TAJ MAHAL',
+    ('ENGENDERED QUARTZ'): 'ENGINEERED QUARTZ',
+    ('QUARTITE'): 'QUARTZITE',
+    ('Q-ARTZ'): 'Q-ARTS',
+    ('MBOLIS'): 'MARBOLIS',
+    ('ANTOLINI TECH'): 'ANTOLINI',
+    ('CRYSTALLO'): 'CRISTALLO',
+    ('SLAB STUDIO'): 'SLABSTUDIO',
+    ('POL'): 'POLISHED',
+}
+
+SEARCH = {
+    'material': ['DOLOMITE', 'GRANITE', 'MARBLE', 'QUARTZITE', 'PORCELAIN', 'QUARTZ', 'ENGINEERED QUARTZ', ],
+    'vendor': ['Q-ARTS', 'SLABSTUDIO', 'SLAB STUDIO', 'ANTOLINI', 'MBS', 'MARBOLIS', 'MB', ],
+    'finish': ['SATIN', 'HONED', 'LEATHER', 'SOFT-LEATHER', 'MATTE', 'POLISHED', ],
+    'UNDEFINED': ['COMM', 'MEXP', 'DESIGNER CECILIA', ],
+    'IGNORE': ['ITALY', ' SLAB ', 'BOOKMARKED', 'BRAZILIAN', ],
+    'misc_charge': ['A FRAME DEPOSIT', 'FREIGHT', 'FABRICATION', 'REFINISH', ],
+    'detail': ['PARTIAL SLAB', 'BUNDLE', ],
+}
