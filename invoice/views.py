@@ -8,7 +8,8 @@ from django.utils.encoding import force_str
 from django.http.response import JsonResponse
 from django.urls import reverse_lazy, reverse
 
-from formset.views import EditCollectionView, FormCollectionView, FormView, FileUploadMixin, FormViewMixin
+from formset.views import EditCollectionView, FormCollectionView, FormView, FileUploadMixin, FormViewMixin, \
+    IncompleteSelectResponseMixin
 
 from .forms import *
 from .models import *
@@ -34,6 +35,8 @@ class EditView(FormView):
 
     def form_valid(self, form):
         if extra_data := self.get_extra_data():
+            if extra_data.get('add') is True:
+                form.instance.save()
             if extra_data.get('delete') is True:
                 self.object.delete()
                 success_url = self.get_success_url()
@@ -72,7 +75,6 @@ class CustomerEditView(EditView, UpdateView):
 
 
 class CustomerCollectionView(FormCollectionView):
-
     collection_class = CustomerCollection
     template_name = 'invoice/customer-collection.html'
 
@@ -100,7 +102,7 @@ class ProductDetailListView(TotalsListView):
     template_name = 'invoice/prodetail-list.html'
 
 
-class ProductDetailEditView(EditView, UpdateView):
+class ProductDetailEditView(EditView, UpdateView, IncompleteSelectResponseMixin):
     model = ProductDetail
     template_name = 'invoice/prodetail-add.html'
     form_class = ProductDetailForm
@@ -113,7 +115,7 @@ class ProductDetailEditView(EditView, UpdateView):
             return reverse('prodetails-list')
 
 
-class ProductCollectionView(FormCollectionView):
+class ProductCollectionView(EditCollectionView):
     collection_class = ProductCollection
     template_name = 'invoice/product-collection.html'
 
@@ -157,7 +159,7 @@ class InvoiceListView(TotalsListView):
     template_name = 'invoice/invoice-list.html'
 
 
-class InvoiceEditView(EditView, UpdateView):
+class InvoiceEditView(EditView, UpdateView, IncompleteSelectResponseMixin):
     model = Invoice
     template_name = 'invoice/invoice-add.html'
     form_class = InvoiceForm
@@ -170,6 +172,7 @@ class InvoiceEditView(EditView, UpdateView):
             return reverse('invoice-list')
 
 
+# implement EditCollectionView
 class InvoiceCollectionView(FormCollectionView):
     collection_class = InvoiceCollection
     template_name = 'invoice/invoice-collection.html'
