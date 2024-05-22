@@ -168,7 +168,7 @@ class CustomerForm(ModelForm):
             'city',
             'state',
             'zip',
-            'customer_notes',
+            'notes',
         ]
         widgets = {
             'first_name': forms.TextInput(attrs={
@@ -214,7 +214,7 @@ class CustomerForm(ModelForm):
                 'class': 'form-control',
                 'id': 'zip',
             }),
-            'customer_notes': forms.Textarea(attrs={
+            'notes': forms.Textarea(attrs={
                 'class': 'form-control',
                 'id': 'customer_notes',
                 'placeholder': 'Enter customer notes',
@@ -514,7 +514,7 @@ class InvoiceForm(ModelForm):
                 'default': '0.00',
                 'type': 'number',
                 'oninput': 'calculateBalance()',
-                'step': '0.00',
+                'step': '0.01',
                 'onblur': 'addDecimalToDeposit()',
             }),
             'balance': forms.NumberInput(attrs={
