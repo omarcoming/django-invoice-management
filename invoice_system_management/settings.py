@@ -87,13 +87,13 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'testing',
+        'NAME': 'invoicing',
         'USER': credentials.get('USER'),
         'PASSWORD': credentials.get('PASSWORD'),
         'HOST': 'localhost',
-        'PORT': '5432',
+        # 'PORT': '5432',
         ## marble yard postgres 14:
-        # 'PORT': '5434',
+        'PORT': '5434',
     }
 }
 

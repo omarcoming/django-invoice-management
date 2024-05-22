@@ -2,10 +2,7 @@ from datetime import datetime
 
 from django.forms import fields, ModelForm
 from django import forms
-from django.forms import formset_factory, modelformset_factory, inlineformset_factory
-from django.forms.models import construct_instance, model_to_dict
-from django.contrib.admin.widgets import AutocompleteSelect
-from django.contrib import admin
+
 
 from formset.collection import FormCollection
 from formset.renderers.bootstrap import FormRenderer
