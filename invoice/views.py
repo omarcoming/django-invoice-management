@@ -46,7 +46,6 @@ class EditView(FormView):
 
 
 class TotalsListView(ListView):
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # context['total_product'] = Totals.total_product
@@ -74,9 +73,9 @@ class ContactEditView(EditView, UpdateView):
             return reverse('contact-list')
 
 
-class ContactCollectionView(FormCollectionView):
-    collection_class = ContactCollection
-    template_name = 'invoice/contact-collection.html'
+# class ContactCollectionView(FormCollectionView):
+#     collection_class = ContactCollection
+#     template_name = 'invoice/contact-collection.html'
 
 
 class ProductListView(TotalsListView):
@@ -134,7 +133,6 @@ class ProductCollectionView(EditCollectionView):
         # context['product'] = self.product
         # context['product_detail'] = self.product_detail
         return context
-
 
 
 class InvoiceListView(TotalsListView):

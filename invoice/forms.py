@@ -150,7 +150,7 @@ class ContactForm(ModelForm):
         },
     )
     legend = 'Contact'
-    hide_if = 'ext_contact.extant'
+    # hide_if = 'ext_contact.extant'
 
     class Meta:
         model = Contact
@@ -165,6 +165,7 @@ class ContactForm(ModelForm):
             'city',
             'state',
             'zip',
+            'category',
             'notes',
         ]
         widgets = {
@@ -211,6 +212,11 @@ class ContactForm(ModelForm):
                 'class': 'form-control',
                 'id': 'zip',
             }),
+            'category': forms.Select(attrs={
+                # 'class': 'form-control product-input mb-1 col-2',
+                'class': 'form-control',
+                'id': 'category',
+            }),
             'notes': forms.Textarea(attrs={
                 'class': 'form-control',
                 'id': 'contact_notes',
@@ -225,22 +231,21 @@ class ContactForm(ModelForm):
         }
 
 
-class ExtantContactForm(forms.Form):
-    extant = fields.BooleanField(
-        label='Existing Contact?',
-        required=False,
-    )
-    default_renderer = FormRenderer(
-        field_css_classes={
-            '*': 'mb-3'
-        },
-    )
-
-
-class ContactCollection(FormCollection):
-    contact = ContactForm()
-    ext_contact = ExtantContactForm()
-    legend = 'Contact'
+# class ExtantContactForm(forms.Form):
+#     extant = fields.BooleanField(
+#         label='Existing Contact?',
+#         required=False,
+#     )
+#     default_renderer = FormRenderer(
+#         field_css_classes={
+#             '*': 'mb-3'
+#         },
+#     )
+#
+# class ContactCollection(FormCollection):
+#     contact = ContactForm()
+#     ext_contact = ExtantContactForm()
+#     legend = 'Contact'
 
 
 class ProductForm(ModelForm):
@@ -450,6 +455,7 @@ class InvoiceForm(ModelForm):
 
 
 class InvoiceCollection(FormCollection):
-    contact = ContactCollection()
+    # contact = ContactCollection()
+    contact = ContactForm()
     product = ProductCollection()
     invoice = InvoiceForm()

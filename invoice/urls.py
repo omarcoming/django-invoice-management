@@ -4,13 +4,14 @@ from .views import *
 
 urlpatterns = [
     path('', InvoiceCollectionView.as_view(), name='home'),
+
     path('contacts', ContactListView.as_view(), name='contact-list'),  # list view not handled here
     path('contact/add/', ContactEditView.as_view(extra_context={'add': True}), name='contact-add', ),
     path('contact/<int:pk>/', ContactEditView.as_view(extra_context={'add': False}), name='contact-edit', ),
 
-    path('cc', ContactListView.as_view(), name='cc-list'),  # list view not handled here
-    path('cc/add/', ContactCollectionView.as_view(extra_context={'add': True}), name='cc-add', ),
-    path('cc/<int:pk>/', ContactCollectionView.as_view(extra_context={'add': False}), name='cc-edit', ),
+    # path('cc', ContactListView.as_view(), name='cc-list'),  # list view not handled here
+    # path('cc/add/', ContactCollectionView.as_view(extra_context={'add': True}), name='cc-add', ),
+    # path('cc/<int:pk>/', ContactCollectionView.as_view(extra_context={'add': False}), name='cc-edit', ),
 
     path('products', ProductListView.as_view(), name='product-list'),
     path('product/add/', ProductEditView.as_view(extra_context={'add': True}), name='product-add'),
