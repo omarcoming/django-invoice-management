@@ -30,17 +30,34 @@ from .models import *
 
 class EditView(FormView):
     def get_object(self, queryset=None):
-        if self.extra_context['add'] is False:
-            return super().get_object(queryset)
+        if queryset is None:
+            queryset = self.get_queryset()
+            if self.kwargs:
+                return queryset.get(pk=self.kwargs['pk'])
+
+    def get_success_url(self):
+        model = self.model._meta.model_name
+        # if pk := self.kwargs.get('pk'):
+        if pk := self.object.id:
+            return reverse(f'{model}-edit', kwargs={'pk': pk})
+        else:
+            return reverse(f'{model}-list')
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        if self.object:
+            context_data['change'] = True
+        else:
+            context_data['add'] = True
+        return context_data
 
     def form_valid(self, form):
         if extra_data := self.get_extra_data():
             if extra_data.get('add') is True:
                 form.instance.save()
             if extra_data.get('delete') is True:
-                self.object.delete()
-                success_url = self.get_success_url()
-                response_data = {'success_url': force_str(success_url)} if success_url else {}
+                form.instance.delete()
+                response_data = {'success_url': force_str(self.get_success_url())}
                 return JsonResponse(response_data)
         return super().form_valid(form)
 
@@ -62,15 +79,10 @@ class ContactListView(TotalsListView):
 
 class ContactEditView(EditView, UpdateView):
     model = Contact
-    template_name = 'invoice/contact_add.html'
+    template_name = 'invoice/contact.html'
     form_class = ContactForm
     extra_context = None
 
-    def get_success_url(self):
-        if pk := self.object.id:
-            return reverse('contact-edit', kwargs={'pk': pk})
-        else:
-            return reverse('contact-list')
 
 
 # class ContactCollectionView(FormCollectionView):
@@ -83,17 +95,17 @@ class ProductListView(TotalsListView):
     template_name = 'invoice/product-list.html'
 
 
-class ProductEditView(EditView, UpdateView):
+class ProductEditView(EditView, UpdateView, IncompleteSelectResponseMixin):
     model = Product
-    template_name = 'invoice/product-add.html'
+    template_name = 'invoice/product.html'
     form_class = ProductForm
     extra_context = None
 
-    def get_success_url(self):
-        if pk := self.object.id:
-            return reverse('product-edit', kwargs={'pk': pk})
-        else:
-            return reverse('product-list')
+    # def get_success_url(self):
+    #     if pk := self.object.id:
+    #         return reverse('product-edit', kwargs={'pk': pk})
+    #     else:
+    #         return reverse('product-list')
 
 
 class ProductDetailListView(TotalsListView):
@@ -103,18 +115,18 @@ class ProductDetailListView(TotalsListView):
 
 class ProductDetailEditView(EditView, UpdateView, IncompleteSelectResponseMixin):
     model = ProductDetail
-    template_name = 'invoice/prodetail-add.html'
+    template_name = 'invoice/prodetail.html'
     form_class = ProductDetailForm
     extra_context = None
 
-    def get_success_url(self):
-        if pk := self.object.id:
-            return reverse('prodetail-edit', kwargs={'pk': pk})
-        else:
-            return reverse('prodetails-list')
+    # def get_success_url(self):
+    #     if pk := self.object.id:
+    #         return reverse('prodetail-edit', kwargs={'pk': pk})
+    #     else:
+    #         return reverse('prodetails-list')
 
 
-class ProductCollectionView(EditCollectionView):
+class ProductCollectionView(EditCollectionView, IncompleteSelectResponseMixin):
     collection_class = ProductCollection
     template_name = 'invoice/product-collection.html'
 
@@ -142,7 +154,7 @@ class InvoiceListView(TotalsListView):
 
 class InvoiceEditView(EditView, UpdateView, IncompleteSelectResponseMixin):
     model = Invoice
-    template_name = 'invoice/invoice-add.html'
+    template_name = 'invoice/invoice.html'
     form_class = InvoiceForm
     extra_context = None
 

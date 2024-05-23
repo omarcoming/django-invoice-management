@@ -28,12 +28,12 @@
 
             {% if add %}
                 <button type="button"
-                        click="submit({add: true}) -> proceed">{% translate "Add" %}</button>
+                        df-click="submit({add: true}) -> proceed">{% translate "Add" %}</button>
             {% else %}
                 <button type="button"
-                        click="submit({update: true}) -> proceed">{% translate "Update" %}</button>
+                        df-click="submit({update: true}) -> proceed">{% translate "Update" %}</button>
                 <button type="button"
-                        click="submit({delete: true}) -> proceed">{% translate "Delete" %}</button>
+                        df-click="submit({delete: true}) -> proceed">{% translate "Delete" %}</button>
             {% endif %}
 
         </django-formset>

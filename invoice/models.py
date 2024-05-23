@@ -31,11 +31,6 @@ class Contact(models.Model):
 
 
 class Product(models.Model):
-    prod_name = models.CharField('Product', max_length=255)
-    unit = models.CharField('Unit', default='ea', max_length=255)
-    vendor = models.CharField('Vendor', max_length=255, blank=True)
-    product_is_delete = models.BooleanField(default=False)
-
     class Material(models.TextChoices):
         NATURAL_QUARTZITE = 'NATURAL QUARTZITE', 'Natural Quartzite'
         ENGINEERED_QUARTZ = 'ENGINEERED QUARTZ', 'Engineered Quartz'
@@ -57,23 +52,28 @@ class Product(models.Model):
         LEATHERED = 'LEATHERED'
         SATIN = 'SATIN'
 
+    name = models.CharField('Product', max_length=255)
+    unit = models.CharField('Unit', default='ea', max_length=255)
+    vendor = models.CharField('Vendor', max_length=255, blank=True)
     material = models.CharField('Material', max_length=255, choices=Material.choices, blank=True)
+    product_is_delete = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.prod_name)
+        return str(self.name)
 
 
 class ProductDetail(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
 
-    qty = models.DecimalField('Qty', default=0, decimal_places=2, max_digits=9)
+    qty = models.IntegerField('Qty', default=0)
     price = models.DecimalField('Price', default=0, decimal_places=2, max_digits=9)
     prod_total = models.DecimalField('Product Total', default=0, decimal_places=2, max_digits=9)
     block = models.CharField('Block No.', max_length=55, null=True, blank=True)
     length = models.DecimalField('Length', default=0, decimal_places=2, max_digits=9, null=True, blank=True)
     width = models.DecimalField('Width', default=0, decimal_places=2, max_digits=9, null=True, blank=True)
 
-    invoice = models.ForeignKey('Invoice', on_delete=models.CASCADE, null=True, blank=True)
+    # invoice = models.ForeignKey('Invoice', on_delete=models.CASCADE, null=True, blank=True)
+    invoice = models.OneToOneField('Invoice', on_delete=models.CASCADE, null=True)
 
 
 class Invoice(models.Model):

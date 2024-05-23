@@ -4,7 +4,6 @@
 
 {% block content %}
     <!-- PRODUCT CARD -->
-
         <!-- Card Header - Dropdown -->
         <div class="card-header">
             <a data-toggle="collapse" href="#product-info" aria-expanded="true"
@@ -18,25 +17,15 @@
             {{ form_collection }}
             {% if add %}
                 <button type="button"
-                        click="submit({add: true}) -> proceed">{% translate "Add" %}</button>
+                        df-click="submit({add: true}) -> proceed">{% translate "Add" %}</button>
             {% else %}
                 <button type="button"
-                        click="submit({update: true}) -> proceed">{% translate "Update" %}</button>
+                        df-click="submit({update: true}) -> proceed">{% translate "Update" %}</button>
                 <button type="button"
-                        click="submit({delete: true}) -> proceed">{% translate "Delete" %}</button>
+                        df-click="submit({delete: true}) -> proceed">{% translate "Delete" %}</button>
             {% endif %}
 
         </django-formset>
 
-        {#                {% load formsetify %}#}
-        {##}
-        {#                {% load render_form from formsetify %}#}
-        {#                <div id="product-info" class="card-body collapse show">#}
-        {#                    <django-formset endpoint="{{ request.path }}" csrf-token="{{ csrf_token }}">#}
-        {#                        {{ form_collection }}#}
-        {#                        <button type="button" click="submit -> proceed">Submit</button>#}
-        {#                    </django-formset>#}
-
-
-
+    
 {% endblock %}

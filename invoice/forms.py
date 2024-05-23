@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.forms import fields, ModelForm
+from django.forms.models import construct_instance, model_to_dict
 from django import forms
 
 
@@ -263,9 +264,9 @@ class ProductForm(ModelForm):
         model = Product
         fields = [
             'unit',
-            'prod_name',
+            'name',
             'material',
-            # 'vendor',
+            'vendor',
             'id',
         ]
         widgets = {
@@ -274,11 +275,21 @@ class ProductForm(ModelForm):
                 'class': 'form-control',
                 'id': 'unit',
             }),
-            'prod_name': forms.TextInput(attrs={
-                # 'class': 'form-control product-input mb-1 col-3',
-                'class': 'form-control',
-                'id': 'prod_name',
-            }),
+            'name': Selectize(
+                search_lookup='product_name__istartswith',
+                attrs={
+                    'data-minimum-input-length': 2,
+                    'allowClear': 'true',
+                    'data-placeholder': 'Find Product',
+                    'dropdownAutoWidth': 'true',
+                    'class': 'form-control product-input',
+                }
+            ),
+            # 'name': forms.TextInput(attrs={
+            #     # 'class': 'form-control product-input mb-1 col-3',
+            #     'class': 'form-control',
+            #     'id': 'prod_name',
+            # }),
             'material': forms.Select(attrs={
                 # 'class': 'form-control product-input mb-1 col-2',
                 'class': 'form-control',
@@ -287,11 +298,20 @@ class ProductForm(ModelForm):
             'vendor': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'vendor',
-                'hidden': 'true',
                 'value': 'Q-ARTS',
             }),
         }
 
+# class ProductCollection(FormCollection):
+#     product = ProductForm()
+#     related_field = 'productdetail'
+#
+#     def retrieve_instance(self, data):
+#         if data := data.get('product'):
+#             try:
+#                 return self.instance.products.get(id=data.get('id') or 0)
+#             except(AttributeError, Product.DoesNotExist, ValueError):
+#                 return Product(name=data.get('name'), productdetail=)
 
 class ProductDetailForm(ModelForm):
     id = forms.IntegerField(required=False, widget=forms.HiddenInput)
@@ -299,7 +319,7 @@ class ProductDetailForm(ModelForm):
         form_css_classes='row',
         field_css_classes={
             'product': 'mb-1 col-2',
-            'qty': 'mb-1 col-2',
+            'qty': 'mb-1 col-1',
             'price': 'mb-1 col-2',
             'prod_total': 'mb-1 col-2',
             'block': 'mb-1 col-2',
@@ -312,13 +332,13 @@ class ProductDetailForm(ModelForm):
     class Meta:
         model = ProductDetail
         fields = [
-            'product',
-            'qty',
-            'price',
-            'prod_total',
             'block',
             'length',
             'width',
+            'qty',
+            'product',
+            'price',
+            'prod_total',
             'id',
         ]
         widgets = {
@@ -367,12 +387,40 @@ class ProductDetailForm(ModelForm):
             })
         }
 
+        # def model_to_dict(self, product):
+        #     try:
+        #         return model_to_dict(product.productdetail, fields=self._meta.fields, exclude=self._meta.exclude)
+        #     except ProductDetail.DoesNotExist:
+        #         return {}
+        #
+        # def construct_instance(self, product):
+        #     try:
+        #         productdetail = product.productdetail
+        #     except ProductDetail.DoesNotExist:
+        #         productdetail = ProductDetail(product=product)
+        #     form = ProductDetailForm(data=self.cleaned_data, instance=productdetail)
+        #     if form.is_valid():
+        #         construct_instance(form, productdetail)
+        #         form.save()
+
+class ProductDetailCollection(FormCollection):
+    min_siblings = 1
+    productdetail = ProductDetailForm()
+    add_label = 'Add Product'
+    related_field = 'product'
+
+    def retrieve_instance(self, data):
+        if data := data.get('productdetail'):
+            try:
+                return self.instsance.productdetails.get(id=data.get('id') or 0)
+            except(AttributeError, Product.DoesNotExist, ValueError):
+                return ProductDetail(name=data.get('name'), product=self.instance)
+
 
 class ProductCollection(FormCollection):
     extra_siblings = 0
-    add_label = 'Add Product'
-    # product = ProductForm()
-    product_detail = ProductDetailForm()
+    product = ProductForm()
+    product_detail = ProductDetailCollection()
 
 
 class InvoiceForm(ModelForm):
