@@ -57,8 +57,24 @@
                                 <span>Create Invoice</span>
                             </a>
                         </li>
-
                         <hr class="divider">
+                        
+                        <!-- CONTACTS -->
+                        <li class="nav-item">
+                            <div class="dropdown pb-4">
+                                <a href="#submenu3"
+                                   class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                                   id="dropdown-product" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-address-card"></i>
+                                    <span class="d-none d-sm-inline mx-1">Contacts</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                                    <li><a class="dropdown-item" href="{% url 'contact-add' %}">Add</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'contact-list' %}">View List</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        
                         <!-- INVOICES -->
                         <li class="nav-item">
                             <div class="dropdown pb-4">
@@ -91,39 +107,7 @@
                                 </ul>
                             </div>
                         </li>
-
-                        <!-- CUSTOMERS -->
-                        <li class="nav-item">
-                            <div class="dropdown pb-4">
-                                <a href="#submenu3"
-                                   class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-                                   id="dropdown-product" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-address-card"></i>
-                                    <span class="d-none d-sm-inline mx-1">Customers</span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                                    <li><a class="dropdown-item" href="{% url 'customer-add' %}">Add</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'customer-list' %}">View List</a></li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <!-- CONTRACTORS -->
-                        <li class="nav-item">
-                            <div class="dropdown pb-4">
-                                <a href="#submenu4"
-                                   class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-                                   id="dropdown-product" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-building-user"></i>
-                                    <span class="d-none d-sm-inline mx-1">Contractors</span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                                    <li><a class="dropdown-item" href="{% url 'contractor-add' %}">Add</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'contractor-list' %}">View List</a></li>
-                                </ul>
-                            </div>
-                        </li>
-
+                        
                     </ul>
                     <hr>
                     <div class="dropdown pb-4">
@@ -222,17 +206,17 @@
                                     </div>
                                 </div>
 
-                                <!-- Total Customers (Monthly) Card  -->
+                                <!-- Total Contacts (Monthly) Card  -->
                                 <div class="col-xl-3 col-md-6 mb-4">
                                     <div class="card border-left-success shadow h-100 py-2">
                                         <div class="card-body">
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col mr-2">
                                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                        Total customers
+                                                        Total contacts
                                                     </div>
                                                     <div
-                                                            class="h5 mb-0 font-weight-bold text-gray-800">{{ total_customer }}</div>
+                                                            class="h5 mb-0 font-weight-bold text-gray-800">{{ total_contact }}</div>
                                                 </div>
                                                 <div class="col-auto">
                                                     <i class="fas fa-user fa-2x text-gray-300"></i>

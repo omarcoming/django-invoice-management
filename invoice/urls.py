@@ -4,17 +4,13 @@ from .views import *
 
 urlpatterns = [
     path('', InvoiceCollectionView.as_view(), name='home'),
-    path('customers', CustomerListView.as_view(), name='customer-list'),  # list view not handled here
-    path('customer/add/', CustomerEditView.as_view(extra_context={'add': True}), name='customer-add', ),
-    path('customer/<int:pk>/', CustomerEditView.as_view(extra_context={'add': False}), name='customer-edit', ),
+    path('contacts', ContactListView.as_view(), name='contact-list'),  # list view not handled here
+    path('contact/add/', ContactEditView.as_view(extra_context={'add': True}), name='contact-add', ),
+    path('contact/<int:pk>/', ContactEditView.as_view(extra_context={'add': False}), name='contact-edit', ),
 
-    path('cc', CustomerListView.as_view(), name='cc-list'),  # list view not handled here
-    path('cc/add/', CustomerCollectionView.as_view(extra_context={'add': True}), name='cc-add', ),
-    path('cc/<int:pk>/', CustomerCollectionView.as_view(extra_context={'add': False}), name='cc-edit', ),
-
-    path('contractors', ContractorListView.as_view(), name='contractor-list'),  # list view not handled here
-    path('contractor/add/', ContractorEditView.as_view(extra_context={'add': True}), name='contractor-add', ),
-    path('contractor/<int:pk>/', ContractorEditView.as_view(extra_context={'add': False}), name='contractor-edit', ),
+    path('cc', ContactListView.as_view(), name='cc-list'),  # list view not handled here
+    path('cc/add/', ContactCollectionView.as_view(extra_context={'add': True}), name='cc-add', ),
+    path('cc/<int:pk>/', ContactCollectionView.as_view(extra_context={'add': False}), name='cc-edit', ),
 
     path('products', ProductListView.as_view(), name='product-list'),
     path('product/add/', ProductEditView.as_view(extra_context={'add': True}), name='product-add'),

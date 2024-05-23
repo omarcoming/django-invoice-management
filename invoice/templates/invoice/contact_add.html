@@ -9,14 +9,14 @@
 
     <!-- Card Header - Dropdown -->
     <div class="card-header">
-        <a data-toggle="collapse" href="#customer-info" aria-expanded="true"
-           aria-controls="collapse-example" id="customer-heading" class="d-block">
-            <label class="m-0 font-weight-bold text-primary">Customer Information</label>
+        <a data-toggle="collapse" href="#contact-info" aria-expanded="true"
+           aria-controls="collapse-example" id="contact-heading" class="d-block">
+            <label class="m-0 font-weight-bold text-primary">contact Information</label>
             <i class="fa fa-chevron-down pull-left" style="font-size:16px"></i>
         </a>
     </div>
-    <!-- CUSTOMER FORM -->
-    <div id="customer-info" class="card-body collapse show">
+    <!-- contact FORM -->
+    <div id="contact-info" class="card-body collapse show">
         {% load render_form from formsetify %}
         <django-formset endpoint="{{ request.path }}" csrf-token="{{ csrf_token }}">
             {% render_form form %}

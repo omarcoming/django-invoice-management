@@ -1,5 +1,36 @@
 from django.db import models
 
+# class Contact(models.Model):
+#     first_name = models.CharField('First Name', max_length=55, blank=True)
+#     last_name = models.CharField('Last Name', max_length=55, blank=True)
+#     phone = models.CharField('Phone Number', max_length=10, blank=True)
+#     alt_phone = models.CharField('Alt Phone Number', max_length=10, blank=True)
+#     company = models.CharField('Company', max_length=55, blank=True)
+#     email = models.EmailField('Email', null=True, blank=True)
+#     address = models.CharField('Address', max_length=55, blank=True)
+#     city = models.CharField('City', max_length=55, blank=True)
+#     state = models.CharField('State', max_length=55, blank=True)
+#     zip = models.CharField('Zip Code', max_length=9, blank=True)
+#     notes = models.TextField('Customer Notes', blank=True)
+#
+#     date_created = models.DateTimeField(auto_created=True, null=True, blank=True)
+#
+#     class Category(models.TextChoices):
+#         CONTRACTOR = 'CONTRACTOR', 'Contractor'
+#         DESIGNER = 'DESIGNER', 'Designer'
+#         CUSTOMER = 'CUSTOMER', 'Customer'
+#         VENDOR = 'VENDOR', 'Vendor'
+#         FABRICATOR = 'FABRICATOR', 'Fabricator'
+#         LEAD = 'LEAD', 'Lead'
+#         OTHER = 'OTHER', 'Other'
+#
+#     category = models.CharField('Category', max_length=255, choices=Category.choices, blank=True)
+#
+#     def __str__(self):
+#         return f'{self.first_name} {self.last_name}'
+
+
+
 class Contact(models.Model):
     first_name = models.CharField('First Name', max_length=55, blank=True)
     last_name = models.CharField('Last Name', max_length=55, blank=True)
@@ -11,38 +42,7 @@ class Contact(models.Model):
     city = models.CharField('City', max_length=55, blank=True)
     state = models.CharField('State', max_length=55, blank=True)
     zip = models.CharField('Zip Code', max_length=9, blank=True)
-    notes = models.TextField('Customer Notes', blank=True)
-
-    date_created = models.DateTimeField(auto_created=True, null=True, blank=True)
-
-    class Category(models.TextChoices):
-        CONTRACTOR = 'CONTRACTOR', 'Contractor'
-        DESIGNER = 'DESIGNER', 'Designer'
-        CUSTOMER = 'CUSTOMER', 'Customer'
-        VENDOR = 'VENDOR', 'Vendor'
-        FABRICATOR = 'FABRICATOR', 'Fabricator'
-        LEAD = 'LEAD', 'Lead'
-        OTHER = 'OTHER', 'Other'
-
-    category = models.CharField('Category', max_length=255, choices=Category.choices, blank=True)
-
-    def __str__(self):
-        return f'{self.first_name} {self.last_name}'
-
-
-
-class Customer(models.Model):
-    first_name = models.CharField('First Name', max_length=55, blank=True)
-    last_name = models.CharField('Last Name', max_length=55, blank=True)
-    phone = models.CharField('Phone Number', max_length=10, blank=True)
-    alt_phone = models.CharField('Alt Phone Number', max_length=10, blank=True)
-    company = models.CharField('Company', max_length=55, blank=True)
-    email = models.EmailField('Email', null=True, blank=True)
-    address = models.CharField('Address', max_length=55, blank=True)
-    city = models.CharField('City', max_length=55, blank=True)
-    state = models.CharField('State', max_length=55, blank=True)
-    zip = models.CharField('Zip Code', max_length=9, blank=True)
-    notes = models.TextField('Customer Notes', blank=True)
+    notes = models.TextField('Contact Notes', blank=True)
 
     date_created = models.DateTimeField(auto_created=True, null=True, blank=True)
 
@@ -50,21 +50,6 @@ class Customer(models.Model):
         return f'{self.first_name} {self.last_name}'
 
 
-class Contractor(models.Model):
-    contractor_first_name = models.CharField('Contractor First Name', max_length=55, blank=True)
-    contractor_last_name = models.CharField('Contractor Last Name', max_length=55, blank=True)
-    contractor_company = models.CharField('Contractor Company', max_length=55, blank=True)
-    contractor_phone = models.CharField('Contractor Phone', blank=True)
-    contractor_email = models.EmailField('Contractor Email', null=True, blank=True)
-
-    # contractor_address = models.CharField('Contractor Address', max_length=55, blank=True)
-    # contractor_city = models.CharField('Contractor City', max_length=55, blank=True)
-    # contractor_state = models.CharField('Contractor State', max_length=55, blank=True)
-    # contractor_zip = models.CharField('Contractor Zip Code', max_length=9, blank=True)
-
-    contractor_notes = models.TextField(blank=True)
-
-    date_created = models.DateTimeField(auto_created=True, null=True, blank=True)
 
 
 class Product(models.Model):
@@ -139,8 +124,8 @@ class Invoice(models.Model):
     balance = models.DecimalField('Balance', decimal_places=2, max_digits=9, default=0)
     invoice_notes = models.TextField('Notes', blank=True)
 
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
-    contractor = models.ForeignKey(Contractor, on_delete=models.CASCADE, null=True, blank=True)
+    contact = models.ForeignKey(Contact, on_delete=models.CASCADE, null=True, blank=True)
+
 
 
     def __str__(self):

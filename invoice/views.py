@@ -17,7 +17,7 @@ from .models import *
 
 # class Totals:
 #     total_product = Product.objects.count()
-#     total_customer = Customer.objects.count()
+#     total_contact = Contact.objects.count()
 #     total_invoice = Invoice.objects.count()
 #
 #     @classmethod
@@ -50,33 +50,33 @@ class TotalsListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # context['total_product'] = Totals.total_product
-        # context['total_customer'] = Totals.total_customer
+        # context['total_contact'] = Totals.total_contact
         # context['total_invoice'] = Totals.total_invoice
         # context['total_income'] = Totals.total_income
         return context
 
 
-class CustomerListView(TotalsListView):
-    model = Customer
-    template_name = 'invoice/customer-list.html'
+class ContactListView(TotalsListView):
+    model = Contact
+    template_name = 'invoice/contact-list.html'
 
 
-class CustomerEditView(EditView, UpdateView):
-    model = Customer
-    template_name = 'invoice/customer_add.html'
-    form_class = CustomerForm
+class ContactEditView(EditView, UpdateView):
+    model = Contact
+    template_name = 'invoice/contact_add.html'
+    form_class = ContactForm
     extra_context = None
 
     def get_success_url(self):
         if pk := self.object.id:
-            return reverse('customer-edit', kwargs={'pk': pk})
+            return reverse('contact-edit', kwargs={'pk': pk})
         else:
-            return reverse('customer-list')
+            return reverse('contact-list')
 
 
-class CustomerCollectionView(FormCollectionView):
-    collection_class = CustomerCollection
-    template_name = 'invoice/customer-collection.html'
+class ContactCollectionView(FormCollectionView):
+    collection_class = ContactCollection
+    template_name = 'invoice/contact-collection.html'
 
 
 class ProductListView(TotalsListView):
@@ -136,23 +136,6 @@ class ProductCollectionView(EditCollectionView):
         return context
 
 
-class ContractorListView(TotalsListView):
-    model = Contractor
-    template_name = 'invoice/contractor-list.html'
-
-
-class ContractorEditView(EditView, UpdateView):
-    model = Contractor
-    template_name = 'invoice/contractor-add.html'
-    form_class = ContractorForm
-    extra_context = None
-
-    def get_success_url(self):
-        if pk := self.object.id:
-            return reverse('contractor-edit', kwargs={'pk': pk})
-        else:
-            return reverse('contractor-list')
-
 
 class InvoiceListView(TotalsListView):
     model = Invoice
@@ -177,8 +160,7 @@ class InvoiceCollectionView(FormCollectionView):
     collection_class = InvoiceCollection
     template_name = 'invoice/invoice-collection.html'
 
-    customer = CustomerForm()
-    contractor = ContractorForm()
+    contact = ContactForm()
     product = ProductCollection()
     invoice = InvoiceForm()
 
@@ -189,8 +171,7 @@ class InvoiceCollectionView(FormCollectionView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form_collection'] = self.get_form_collection()
-        context['customer'] = self.customer
-        context['contractor'] = self.contractor
+        context['contact'] = self.contact
         context['product'] = self.product
         context['invoice'] = self.invoice
         return context

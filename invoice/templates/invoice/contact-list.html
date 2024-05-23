@@ -1,9 +1,13 @@
 {% extends "invoice/base/base.html" %}
-<!-- CONTRACTOR LIST - Content Row -->
+<!-- contact LIST - Content Row -->
 {% block content %}
+<div class="row">
+    <!-- Area Chart -->
+    <div class="col-xl-12 col-lg-7">
+        <div class="card shadow mb-4">
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <label class="m-0 font-weight-bold text-primary">Contractors</label>
+                <label class="m-0 font-weight-bold text-primary">contacts</label>
             </div>
             <!-- Card Body -->
             <div class="card-body">
@@ -17,32 +21,33 @@
                                 <th>Last Name</th>
                                 <th>Phone</th>
                                 <th>Email</th>
-                                <th>Company</th>
-                                <th>Notes</th>
+                                <th>Address</th>
+                                <th>City</th>
+                                <th>Zip</th>
                                 <th>Edit</th>
-{#                                <th>Delete</th>#}
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for c in object_list %}
+                            {% for contact in object_list %}
                             <tr>
-                                <td style="padding: 0.45em;">{{c.id}}</td>
-                                <td style="padding: 0.45em;">{{c.date_created}}</td>
-                                <td style="padding: 0.45em;">{{c.contractor_first_name}}</td>
-                                <td style="padding: 0.45em;">{{c.contractor_last_name}}</td>
-                                <td style="padding: 0.45em;">{{c.contractor_phone}}</td>
-                                <td style="padding: 0.45em;">{{c.contractor_email}}</td>
-                                <td style="padding: 0.45em;">{{c.contractor_company}}</td>
-                                <td style="padding: 0.45em;">{{c.contractor_notes}}</td>
-
+                                <td style="padding: 0.45em;">{{contact.id}}</td>
+                                <td style="padding: 0.45em;">{{contact.date_created}}</td>
+                                <td style="padding: 0.45em;">{{contact.first_name}}</td>
+                                <td style="padding: 0.45em;">{{contact.last_name}}</td>
+                                <td style="padding: 0.45em;">{{contact.phone}}</td>
+                                <td style="padding: 0.45em;">{{contact.email}}</td>
+                                <td style="padding: 0.45em;">{{contact.address}}</td>
+                                <td style="padding: 0.45em;">{{contact.city}}</td>
+                                <td style="padding: 0.45em;">{{contact.zip}}</td>
                                 <td style="padding: 0;">
-                                    <a href="{% url 'contractor-edit' c.id %}" class="btn btn-outline-primary"
+                                    <a href="{% url 'contact-edit' contact.id %}" class="btn btn-outline-primary"
                                        style="width: 100%; height: 100%; border-radius: 0">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                 </td>
 {#                                <td style="padding: 0;">#}
-{#                                    <a href="{% url 'delete_customer' i.id %}" class="btn btn-outline-danger"#}
+{#                                    <a href="{% url 'delete_contact' i.id %}" class="btn btn-outline-danger"#}
 {#                                       style="width: 100%; height: 100%; border-radius: 0">#}
 {#                                        <i class="fas fa-trash-alt"></i>#}
 {#                                    </a>#}
@@ -53,5 +58,7 @@
                     </table>
                 </div>
             </div>
-
+        </div>
+    </div>
+</div>
 {% endblock %}

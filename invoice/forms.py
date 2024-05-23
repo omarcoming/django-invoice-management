@@ -12,8 +12,8 @@ from formset.widgets import Selectize
 from .models import *
 
 
-# class CustomerForm(Fieldset):
-#     legend = 'Customer'
+# class ContactForm(Fieldset):
+#     legend = 'Contact'
 #
 #     default_renderer = FormRenderer(
 #         fieldset_css_classes='row',
@@ -21,7 +21,7 @@ from .models import *
 #             '*': 'mb-1 col-4',
 #             'city': 'mb-1 col-3',
 #             'state': 'mb-1 col-1',
-#             'customer_notes': 'mb-5 col-12',
+#             'contact_notes': 'mb-5 col-12',
 #         }
 #     )
 #     first_name = forms.CharField(
@@ -30,7 +30,7 @@ from .models import *
 #             attrs={
 #                 'class': 'form-control',
 #                 'id': 'first_name',
-#                 'placeholder': 'Customer First Name',
+#                 'placeholder': 'Contact First Name',
 #             })
 #     )
 #     last_name = forms.CharField(
@@ -39,7 +39,7 @@ from .models import *
 #             attrs={
 #                 'class': 'form-control',
 #                 'id': 'last_name',
-#                 'placeholder': 'Customer Last Name',
+#                 'placeholder': 'Contact Last Name',
 #             })
 #     )
 #     phone = forms.CharField(
@@ -114,13 +114,13 @@ from .models import *
 #             })
 #     )
 #
-#     customer_notes = forms.CharField(
+#     contact_notes = forms.CharField(
 #         required=False,
 #         widget=forms.Textarea(
 #             attrs={
 #                 'class': 'form-control',
-#                 'id': 'customer_notes',
-#                 'placeholder': 'Enter customer notes',
+#                 'id': 'contact_notes',
+#                 'placeholder': 'Enter contact notes',
 #                 'rows': '1'
 #             })
 #     )
@@ -138,22 +138,22 @@ from .models import *
 #     )
 
 
-class CustomerForm(ModelForm):
+class ContactForm(ModelForm):
     default_renderer = FormRenderer(
         form_css_classes='row border p-1 m-1',
         field_css_classes={
             '*': 'mb-1 col-4',
             'city': 'mb-1 col-3',
             'state': 'mb-1 col-1',
-            'customer_notes': 'mb-1 col-12',
+            'contact_notes': 'mb-1 col-12',
             'extant': 'mb-5'
         },
     )
-    legend = 'Customer'
-    hide_if = 'ext_customer.extant'
+    legend = 'Contact'
+    hide_if = 'ext_contact.extant'
 
     class Meta:
-        model = Customer
+        model = Contact
         fields = [
             'first_name',
             'last_name',
@@ -171,12 +171,12 @@ class CustomerForm(ModelForm):
             'first_name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'first_name',
-                'placeholder': 'Customer First Name',
+                'placeholder': 'Contact First Name',
             }),
             'last_name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'last_name',
-                'placeholder': 'Customer Last Name',
+                'placeholder': 'Contact Last Name',
             }),
             'phone': forms.NumberInput(attrs={
                 'class': 'form-control',
@@ -213,8 +213,8 @@ class CustomerForm(ModelForm):
             }),
             'notes': forms.Textarea(attrs={
                 'class': 'form-control',
-                'id': 'customer_notes',
-                'placeholder': 'Enter customer notes',
+                'id': 'contact_notes',
+                'placeholder': 'Enter contact notes',
                 'rows': '1'
             }),
             'date_created': forms.DateTimeInput(attrs={
@@ -225,9 +225,9 @@ class CustomerForm(ModelForm):
         }
 
 
-class ExtantCustomerForm(forms.Form):
+class ExtantContactForm(forms.Form):
     extant = fields.BooleanField(
-        label='Existing Customer?',
+        label='Existing Contact?',
         required=False,
     )
     default_renderer = FormRenderer(
@@ -237,91 +237,10 @@ class ExtantCustomerForm(forms.Form):
     )
 
 
-class CustomerCollection(FormCollection):
-    customer = CustomerForm()
-    ext_customer = ExtantCustomerForm()
-    legend = 'Customer'
-
-
-
-class ContractorForm(ModelForm):
-    default_renderer = FormRenderer(
-        form_css_classes='row border p-1 m-1',
-        field_css_classes={
-            '*': 'mb-1 col-3',
-            'contractor_notes': 'mb-1 col-9',
-        }
-    )
-    legend = 'Contractor'
-    hide_if = 'ext_contractor.extant'
-
-    class Meta:
-        model = Contractor
-        fields = [
-            'contractor_first_name',
-            'contractor_last_name',
-            'contractor_phone',
-            'contractor_email',
-            'contractor_company',
-            'contractor_notes',
-        ]
-        widgets = {
-            'contractor_first_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'id': 'contractor_first_name',
-                'placeholder': 'First Name',
-            }),
-            'contractor_last_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'id': 'contractor_last_name',
-                'placeholder': 'Last Name',
-            }),
-            'contractor_phone': forms.TextInput(attrs={
-                'class': 'form-control',
-                'id': 'contractor_phone',
-            }),
-            # 'alt_phone': forms.TextInput(attrs={
-            #     'class': 'form-control',
-            #     'id': 'alt_phone',
-            # }),
-            'contractor_company': forms.TextInput(attrs={
-                'class': 'form-control',
-                'id': 'contractor_company',
-            }),
-            'contractor_email': forms.EmailInput(attrs={
-                'class': 'form-control',
-                'id': 'contractor_email',
-            }),
-            'contractor_notes': forms.Textarea(attrs={
-                'class': 'form-control',
-                'id': 'contractor_notes',
-                'placeholder': 'Enter contractor notes',
-                'rows': '1'
-            }),
-            'date_created': forms.DateTimeInput(attrs={
-                'class': 'form-control',
-                'id': 'date_created',
-                'value': datetime.now()
-            })
-        }
-
-
-class ExtantContractorForm(forms.Form):
-    extant = fields.BooleanField(
-        label='Working with contractor?',
-        required=False,
-    )
-    default_renderer = FormRenderer(
-        field_css_classes={
-            '*': 'mb-3'
-        },
-    )
-
-
-class ContractorCollection(FormCollection):
-    contractor = ContractorForm()
-    ext_contractor = ExtantContractorForm()
-    legend = 'Contractor'
+class ContactCollection(FormCollection):
+    contact = ContactForm()
+    ext_contact = ExtantContactForm()
+    legend = 'Contact'
 
 
 class ProductForm(ModelForm):
@@ -470,10 +389,10 @@ class InvoiceForm(ModelForm):
             'tax',
             'invoice_notes',
             'total',
-            'customer',
+            'contact',
             'id',
         ]
-        exclude = ['customer']
+        exclude = ['contact']
         widgets = {
             'payment_type': forms.Select(attrs={
                 'class': 'form-control',
@@ -531,7 +450,6 @@ class InvoiceForm(ModelForm):
 
 
 class InvoiceCollection(FormCollection):
-    customer = CustomerCollection()
-    contractor = ContractorCollection()
+    contact = ContactCollection()
     product = ProductCollection()
     invoice = InvoiceForm()
