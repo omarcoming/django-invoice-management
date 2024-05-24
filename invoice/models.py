@@ -15,7 +15,7 @@ class Contact(models.Model):
     notes = models.TextField('Contact Notes', blank=True)
     date_created = models.DateTimeField(auto_created=True, null=True, blank=True)
 
-    class Category(models.TextChoices):
+    class Relation(models.TextChoices):
         CUSTOMER = 'CUSTOMER', 'Customer'
         DESIGNER = 'DESIGNER', 'Designer'
         CONTRACTOR = 'CONTRACTOR', 'Contractor'
@@ -24,42 +24,10 @@ class Contact(models.Model):
         FABRICATOR = 'FABRICATOR', 'Fabricator'
         OTHER = 'OTHER', 'Other'
 
-    category = models.CharField('Category', max_length=255, choices=Category.choices, blank=True)
+    relation = models.CharField('Relation', max_length=255, choices=Relation.choices, blank=True)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
-
-
-class Product(models.Model):
-    class Material(models.TextChoices):
-        NATURAL_QUARTZITE = 'NATURAL QUARTZITE', 'Natural Quartzite'
-        ENGINEERED_QUARTZ = 'ENGINEERED QUARTZ', 'Engineered Quartz'
-        GRANITE = 'GRANITE', 'Granite'
-        MARBLE = 'MARBLE', 'Marble'
-        DOLOMITE = 'DOLOMITE', 'Dolomite'
-        SOAPSTONE = 'SOAPSTONE', 'Soapstone'
-        OTHER = 'OTHER', 'Other'
-
-    class Vendor(models.TextChoices):
-        QARTS = 'Q-ARTS'
-        MARBOLIS = 'MARBOLIS'
-        SLABSTUDIO = 'SLABSTUDIO'
-
-    class Finish(models.TextChoices):
-        POLISHED = 'POLISHED'
-        HONED = 'HONED'
-        MATTE = 'MATTE'
-        LEATHERED = 'LEATHERED'
-        SATIN = 'SATIN'
-
-    name = models.CharField('Product', max_length=255)
-    unit = models.CharField('Unit', default='ea', max_length=255)
-    vendor = models.CharField('Vendor', max_length=255, blank=True)
-    material = models.CharField('Material', max_length=255, choices=Material.choices, blank=True)
-    product_is_delete = models.BooleanField(default=False)
-
-    def __str__(self):
-        return str(self.name)
 
 
 class InvoiceLine(models.Model):
@@ -94,7 +62,7 @@ class InvoiceLine(models.Model):
     qty = models.IntegerField('Qty', default=0)
     price = models.DecimalField('Price', default=0, decimal_places=2, max_digits=9)
     prod_total = models.DecimalField('Line Total', default=0, decimal_places=2, max_digits=9)
-    block = models.CharField('Block No', max_length=55, null=True, blank=True)
+    block = models.CharField('Block #', max_length=55, null=True, blank=True)
     length = models.DecimalField('Length', default=0, decimal_places=2, max_digits=5, null=True, blank=True)
     width = models.DecimalField('Width', default=0, decimal_places=2, max_digits=5, null=True, blank=True)
     invoice = models.ForeignKey('Invoice', on_delete=models.CASCADE, null=True, blank=True)
@@ -130,3 +98,34 @@ class Invoice(models.Model):
 
     def calculate_tax(self, tax_rate=.0775):
         return self.subtotal * tax_rate
+
+class Product(models.Model):
+    class Material(models.TextChoices):
+        NATURAL_QUARTZITE = 'NATURAL QUARTZITE', 'Natural Quartzite'
+        ENGINEERED_QUARTZ = 'ENGINEERED QUARTZ', 'Engineered Quartz'
+        GRANITE = 'GRANITE', 'Granite'
+        MARBLE = 'MARBLE', 'Marble'
+        DOLOMITE = 'DOLOMITE', 'Dolomite'
+        SOAPSTONE = 'SOAPSTONE', 'Soapstone'
+        OTHER = 'OTHER', 'Other'
+
+    class Vendor(models.TextChoices):
+        QARTS = 'Q-ARTS'
+        MARBOLIS = 'MARBOLIS'
+        SLABSTUDIO = 'SLABSTUDIO'
+
+    class Finish(models.TextChoices):
+        POLISHED = 'POLISHED'
+        HONED = 'HONED'
+        MATTE = 'MATTE'
+        LEATHERED = 'LEATHERED'
+        SATIN = 'SATIN'
+
+    name = models.CharField('Product', max_length=255)
+    unit = models.CharField('Unit', default='ea', max_length=255)
+    vendor = models.CharField('Vendor', max_length=255, blank=True)
+    material = models.CharField('Material', max_length=255, choices=Material.choices, blank=True)
+    product_is_delete = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.name)

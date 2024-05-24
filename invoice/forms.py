@@ -144,9 +144,19 @@ class ContactForm(ModelForm):
         form_css_classes='row border p-1 m-1',
         field_css_classes={
             '*': 'mb-1 col-4',
+            'first_name' : 'mb-1 col-3',
+            'last_name' : 'mb-1 col-3',
+            'relation': 'mb-1 col-2',
+            'company' : 'mb-1 col-2',
+            'phone' : 'mb-1 col-2',
+            'alt_phone' : 'mb-1 col-2',
+            'email' : 'mb-1 col-2',
+            'address' : 'mb-1 col-2',
             'city': 'mb-1 col-3',
             'state': 'mb-1 col-1',
-            'notes': 'mb-1 col-8',
+            'zip': 'mb-1 col-2',
+
+            'notes': 'mb-1 col-12',
             'extant': 'mb-5'
         },
     )
@@ -158,6 +168,7 @@ class ContactForm(ModelForm):
         fields = [
             'first_name',
             'last_name',
+            'relation',
             'company',
             'phone',
             'alt_phone',
@@ -166,7 +177,6 @@ class ContactForm(ModelForm):
             'city',
             'state',
             'zip',
-            'category',
             'notes',
         ]
         widgets = {
@@ -179,6 +189,11 @@ class ContactForm(ModelForm):
                 'class': 'form-control',
                 'id': 'last_name',
                 'placeholder': 'Contact Last Name',
+            }),
+            'relation': forms.Select(attrs={
+                # 'class': 'form-control product-input mb-1 col-2',
+                'class': 'form-control',
+                'id': 'relation',
             }),
             'phone': forms.NumberInput(attrs={
                 'class': 'form-control',
@@ -213,11 +228,6 @@ class ContactForm(ModelForm):
                 'class': 'form-control',
                 'id': 'zip',
             }),
-            'category': forms.Select(attrs={
-                # 'class': 'form-control product-input mb-1 col-2',
-                'class': 'form-control',
-                'id': 'category',
-            }),
             'notes': forms.Textarea(attrs={
                 'class': 'form-control',
                 'id': 'contact_notes',
@@ -231,7 +241,11 @@ class ContactForm(ModelForm):
             })
         }
 
-
+class ContactCollection(FormCollection):
+    min_siblings = 1
+    contact = ContactForm()
+    legend = 'SOLD TO:'
+    add_label = 'Add Designer/Contractor'
 
 class ProductForm(ModelForm):
     id = forms.IntegerField(required=False, widget=forms.HiddenInput)
@@ -289,16 +303,16 @@ class ProductForm(ModelForm):
 class InvoiceLineForm(ModelForm):
     id = forms.IntegerField(required=False, widget=forms.HiddenInput)
     default_renderer = FormRenderer(
-        form_css_classes='row',
+        form_css_classes='row border p-1 m-1',
         field_css_classes={
             'unit': 'mb-1 col-1 mx-0',
             'qty': 'mb-1 col-1 mx-0',
             'product': 'mb-1 col-2 mx-0',
-            'material': 'mb-1 col-2 mx-0',
+            'material': 'mb-1 col-1 mx-0',
             'vendor': 'mb-1 col-2 mx-0',
-            'price': 'mb-1 col-2 mx-0',
-            'prod_total': 'mb-1 col-2 mx-0',
-            'block': 'mb-1 col-2 mx-0',
+            'price': 'mb-1 col-1 mx-0',
+            'prod_total': 'mb-1 col-1 mx-0',
+            'block': 'mb-1 col-1 mx-0',
             'length': 'mb-1 col-1 mx-0',
             'width': 'mb-1 col-1 mx-0',
         }
@@ -312,11 +326,14 @@ class InvoiceLineForm(ModelForm):
             'product',
             'material',
             'vendor',
-            'price',
-            'prod_total',
+
             'block',
             'length',
             'width',
+
+            'price',
+            'prod_total',
+
             'id',
         ]
         widgets = {
@@ -384,25 +401,11 @@ class InvoiceLineForm(ModelForm):
             }),
         }
 
-        # def model_to_dict(self, product):
-        #     try:
-        #         return model_to_dict(product.invoiceline, fields=self._meta.fields, exclude=self._meta.exclude)
-        #     except Invoiceline.DoesNotExist:
-        #         return {}
-        #
-        # def construct_instance(self, product):
-        #     try:
-        #         invoiceline = product.invoiceline
-        #     except InvoiceLine.DoesNotExist:
-        #         invoiceline = InvoiceLine(product=product)
-        #     form = InvoicelineForm(data=self.cleaned_data, instance=invoiceline)
-        #     if form.is_valid():
-        #         construct_instance(form, invoiceline)
-        #         form.save()
 
 class InvoiceLineCollection(FormCollection):
     min_siblings = 1
     invoiceline = InvoiceLineForm()
+    legend = 'LINE ITEMS:'
     add_label = 'Add Product'
     related_field = 'product'
 
@@ -500,7 +503,7 @@ class InvoiceForm(ModelForm):
 
 
 class InvoiceCollection(FormCollection):
-    # contact = ContactCollection()
-    contact = ContactForm()
+    contact = ContactCollection()
+    # contact = ContactForm()
     product = InvoiceLineCollection()
     invoice = InvoiceForm()
