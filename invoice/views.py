@@ -108,15 +108,15 @@ class ProductEditView(EditView, UpdateView, IncompleteSelectResponseMixin):
     #         return reverse('product-list')
 
 
-class ProductDetailListView(TotalsListView):
-    model = ProductDetail
-    template_name = 'invoice/prodetail-list.html'
+class InvoicelineListView(TotalsListView):
+    model = InvoiceLine
+    template_name = 'invoice/invoiceline-list.html'
 
 
-class ProductDetailEditView(EditView, UpdateView, IncompleteSelectResponseMixin):
-    model = ProductDetail
-    template_name = 'invoice/prodetail.html'
-    form_class = ProductDetailForm
+class InvoiceLineEditView(EditView, UpdateView, IncompleteSelectResponseMixin):
+    model = InvoiceLine
+    template_name = 'invoice/invoiceline.html'
+    form_class = InvoiceLineForm
     extra_context = None
 
     # def get_success_url(self):
@@ -126,26 +126,34 @@ class ProductDetailEditView(EditView, UpdateView, IncompleteSelectResponseMixin)
     #         return reverse('prodetails-list')
 
 
-class ProductCollectionView(EditCollectionView, IncompleteSelectResponseMixin):
-    collection_class = ProductCollection
-    template_name = 'invoice/product-collection.html'
+# class ProductCollectionView(EditCollectionView, IncompleteSelectResponseMixin):
+#     collection_class = ProductCollection
+#     template_name = 'invoice/product-collection.html'
+#
+#     # product = collection_class.declared_holders.get('product')
+#     # product_detail = collection_class.declared_holders.get('product_detail')
+#     success_url = 'success'
+#     print('')
+#
+#     def get(self, request, *args, **kwargs):
+#         """Handle GET requests: instantiate blank versions of the forms in the collection."""
+#         return self.render_to_response(self.get_context_data())
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['form_collection'] = self.get_form_collection()
+#         # context['product'] = self.product
+#         # context['product_detail'] = self.product_detail
+#         return context
 
-    # product = collection_class.declared_holders.get('product')
-    # product_detail = collection_class.declared_holders.get('product_detail')
-    success_url = 'success'
-    print('')
+class InvoiceLineCollectionView(EditCollectionView):
+    collection_class = InvoiceLineCollection
+    template_name = 'invoice/invoiceline.html'
+    invoice_line = InvoiceLineForm()
 
     def get(self, request, *args, **kwargs):
         """Handle GET requests: instantiate blank versions of the forms in the collection."""
         return self.render_to_response(self.get_context_data())
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form_collection'] = self.get_form_collection()
-        # context['product'] = self.product
-        # context['product_detail'] = self.product_detail
-        return context
-
 
 class InvoiceListView(TotalsListView):
     model = Invoice
@@ -171,7 +179,7 @@ class InvoiceCollectionView(FormCollectionView):
     template_name = 'invoice/invoice-collection.html'
 
     contact = ContactForm()
-    product = ProductCollection()
+    invoice_line = InvoiceLineCollection()
     invoice = InvoiceForm()
 
     def get(self, request, *args, **kwargs):
@@ -182,6 +190,6 @@ class InvoiceCollectionView(FormCollectionView):
         context = super().get_context_data(**kwargs)
         context['form_collection'] = self.get_form_collection()
         context['contact'] = self.contact
-        context['product'] = self.product
+        context['invoiceline'] = self.invoice_line
         context['invoice'] = self.invoice
         return context

@@ -25,11 +25,11 @@ urlpatterns = [
     # path('invoice/add/', InvoiceEditView.as_view(extra_context={'add': True}), name='invoice-add', ),
     # path('invoice/<int:pk>/', InvoiceEditView.as_view(extra_context={'add': False}), name='invoice-edit', ),
 
-    path('prodetails', ProductDetailListView.as_view(), name='productdetails-list'),
-    path('prodetail/add/', ProductDetailEditView.as_view(extra_context={'add': True}), name='productdetails-add'),
-    path('prodetail/<int:pk>/', ProductDetailEditView.as_view(extra_context={'add': False}), name='productdetails-edit'),
+    # path('prodetails', InvoiceLineListView.as_view(), name='invoicelines-list'),
+    path('prodetail/add/', InvoiceLineEditView.as_view(extra_context={'add': True}), name='invoicelines-add'),
+    path('prodetail/<int:pk>/', InvoiceLineEditView.as_view(extra_context={'add': False}), name='invoicelines-edit'),
 
-    path('product-collection/', ProductCollectionView.as_view(), name='product-collection'),
+    path('product-collection/', InvoiceLineCollectionView.as_view(), name='product-collection'),
     path('invoice-collection/', InvoiceCollectionView.as_view(), name='invoice-collection'),
 
 ]

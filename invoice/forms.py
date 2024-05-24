@@ -146,7 +146,7 @@ class ContactForm(ModelForm):
             '*': 'mb-1 col-4',
             'city': 'mb-1 col-3',
             'state': 'mb-1 col-1',
-            'contact_notes': 'mb-1 col-12',
+            'notes': 'mb-1 col-8',
             'extant': 'mb-5'
         },
     )
@@ -232,22 +232,6 @@ class ContactForm(ModelForm):
         }
 
 
-# class ExtantContactForm(forms.Form):
-#     extant = fields.BooleanField(
-#         label='Existing Contact?',
-#         required=False,
-#     )
-#     default_renderer = FormRenderer(
-#         field_css_classes={
-#             '*': 'mb-3'
-#         },
-#     )
-#
-# class ContactCollection(FormCollection):
-#     contact = ContactForm()
-#     ext_contact = ExtantContactForm()
-#     legend = 'Contact'
-
 
 class ProductForm(ModelForm):
     id = forms.IntegerField(required=False, widget=forms.HiddenInput)
@@ -302,56 +286,54 @@ class ProductForm(ModelForm):
             }),
         }
 
-# class ProductCollection(FormCollection):
-#     product = ProductForm()
-#     related_field = 'productdetail'
-#
-#     def retrieve_instance(self, data):
-#         if data := data.get('product'):
-#             try:
-#                 return self.instance.products.get(id=data.get('id') or 0)
-#             except(AttributeError, Product.DoesNotExist, ValueError):
-#                 return Product(name=data.get('name'), productdetail=)
-
-class ProductDetailForm(ModelForm):
+class InvoiceLineForm(ModelForm):
     id = forms.IntegerField(required=False, widget=forms.HiddenInput)
     default_renderer = FormRenderer(
         form_css_classes='row',
         field_css_classes={
-            'product': 'mb-1 col-2',
-            'qty': 'mb-1 col-1',
-            'price': 'mb-1 col-2',
-            'prod_total': 'mb-1 col-2',
-            'block': 'mb-1 col-2',
-            'length': 'mb-1 col-1',
-            'width': 'mb-1 col-1',
-            # '*': 'm-1 col-2',
+            'unit': 'mb-1 col-1 mx-0',
+            'qty': 'mb-1 col-1 mx-0',
+            'product': 'mb-1 col-2 mx-0',
+            'material': 'mb-1 col-2 mx-0',
+            'vendor': 'mb-1 col-2 mx-0',
+            'price': 'mb-1 col-2 mx-0',
+            'prod_total': 'mb-1 col-2 mx-0',
+            'block': 'mb-1 col-2 mx-0',
+            'length': 'mb-1 col-1 mx-0',
+            'width': 'mb-1 col-1 mx-0',
         }
     )
 
     class Meta:
-        model = ProductDetail
+        model = InvoiceLine
         fields = [
+            'unit',
+            'qty',
+            'product',
+            'material',
+            'vendor',
+            'price',
+            'prod_total',
             'block',
             'length',
             'width',
-            'qty',
-            'product',
-            'price',
-            'prod_total',
             'id',
         ]
         widgets = {
-            'product': Selectize(
-                search_lookup='product_name__istartswith',
-                attrs={
-                    'data-minimum-input-length': 2,
-                    'allowClear': 'true',
-                    'data-placeholder': 'Find Product',
-                    'dropdownAutoWidth': 'true',
-                    'class': 'form-control product-input',
-                }
-            ),
+            # 'product': Selectize(
+            #     search_lookup='product_name__istartswith',
+            #     attrs={
+            #         'data-minimum-input-length': 2,
+            #         'allowClear': 'true',
+            #         'data-placeholder': 'Find Product',
+            #         'dropdownAutoWidth': 'true',
+            #         'class': 'form-control product-input',
+            #     }
+            # ),
+            'unit': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'unit',
+            }),
             'qty': forms.NumberInput(attrs={
                 'class': 'form-control product-input qty-product',
                 'id': 'qty',
@@ -384,43 +366,58 @@ class ProductDetailForm(ModelForm):
                 'class': 'form-control product-input',
                 'id': 'width',
                 'type': 'number',
-            })
+            }),
+            'product': forms.TextInput(attrs={
+                # 'class': 'form-control product-input mb-1 col-3',
+                'class': 'form-control',
+                'id': 'product',
+            }),
+            'material': forms.Select(attrs={
+                # 'class': 'form-control product-input mb-1 col-2',
+                'class': 'form-control',
+                'id': 'material',
+            }),
+            'vendor': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'vendor',
+                'value': 'Q-ARTS',
+            }),
         }
 
         # def model_to_dict(self, product):
         #     try:
-        #         return model_to_dict(product.productdetail, fields=self._meta.fields, exclude=self._meta.exclude)
-        #     except ProductDetail.DoesNotExist:
+        #         return model_to_dict(product.invoiceline, fields=self._meta.fields, exclude=self._meta.exclude)
+        #     except Invoiceline.DoesNotExist:
         #         return {}
         #
         # def construct_instance(self, product):
         #     try:
-        #         productdetail = product.productdetail
-        #     except ProductDetail.DoesNotExist:
-        #         productdetail = ProductDetail(product=product)
-        #     form = ProductDetailForm(data=self.cleaned_data, instance=productdetail)
+        #         invoiceline = product.invoiceline
+        #     except InvoiceLine.DoesNotExist:
+        #         invoiceline = InvoiceLine(product=product)
+        #     form = InvoicelineForm(data=self.cleaned_data, instance=invoiceline)
         #     if form.is_valid():
-        #         construct_instance(form, productdetail)
+        #         construct_instance(form, invoiceline)
         #         form.save()
 
-class ProductDetailCollection(FormCollection):
+class InvoiceLineCollection(FormCollection):
     min_siblings = 1
-    productdetail = ProductDetailForm()
+    invoiceline = InvoiceLineForm()
     add_label = 'Add Product'
     related_field = 'product'
 
     def retrieve_instance(self, data):
-        if data := data.get('productdetail'):
+        if data := data.get('invoiceline'):
             try:
-                return self.instsance.productdetails.get(id=data.get('id') or 0)
+                return self.instance.invoicelines.get(id=data.get('id') or 0)
             except(AttributeError, Product.DoesNotExist, ValueError):
-                return ProductDetail(name=data.get('name'), product=self.instance)
+                return InvoiceLine(name=data.get('name'), product=self.instance)
 
 
-class ProductCollection(FormCollection):
-    extra_siblings = 0
-    product = ProductForm()
-    product_detail = ProductDetailCollection()
+# class ProductCollection(FormCollection):
+#     extra_siblings = 0
+#     product = ProductForm()
+#     product_detail = InvoiceLineCollection()
 
 
 class InvoiceForm(ModelForm):
@@ -505,5 +502,5 @@ class InvoiceForm(ModelForm):
 class InvoiceCollection(FormCollection):
     # contact = ContactCollection()
     contact = ContactForm()
-    product = ProductCollection()
+    product = InvoiceLineCollection()
     invoice = InvoiceForm()

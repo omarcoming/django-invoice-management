@@ -62,18 +62,42 @@ class Product(models.Model):
         return str(self.name)
 
 
-class ProductDetail(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+class InvoiceLine(models.Model):
+    class Material(models.TextChoices):
+        NATURAL_QUARTZITE = 'NATURAL QUARTZITE', 'Natural Quartzite'
+        ENGINEERED_QUARTZ = 'ENGINEERED QUARTZ', 'Engineered Quartz'
+        GRANITE = 'GRANITE', 'Granite'
+        MARBLE = 'MARBLE', 'Marble'
+        DOLOMITE = 'DOLOMITE', 'Dolomite'
+        SOAPSTONE = 'SOAPSTONE', 'Soapstone'
+        OTHER = 'OTHER', 'Other'
 
+    class Vendor(models.TextChoices):
+        QARTS = 'Q-ARTS'
+        MARBOLIS = 'MARBOLIS'
+        SLABSTUDIO = 'SLABSTUDIO'
+        WALKERZENGER = 'WALKERZENGER'
+        OTHER = 'OTHER'
+
+    class Finish(models.TextChoices):
+        POLISHED = 'POLISHED'
+        HONED = 'HONED'
+        MATTE = 'MATTE'
+        LEATHERED = 'LEATHERED'
+        SATIN = 'SATIN'
+        OTHER = 'OTHER'
+
+    product = models.CharField('Product', max_length=255)
+    material = models.CharField('Material', max_length=255, choices=Material.choices, blank=True)
+    vendor = models.CharField('Vendor', max_length=255, blank=True)
+    unit = models.CharField('Unit', default='ea', max_length=255)
     qty = models.IntegerField('Qty', default=0)
     price = models.DecimalField('Price', default=0, decimal_places=2, max_digits=9)
-    prod_total = models.DecimalField('Product Total', default=0, decimal_places=2, max_digits=9)
-    block = models.CharField('Block No.', max_length=55, null=True, blank=True)
-    length = models.DecimalField('Length', default=0, decimal_places=2, max_digits=9, null=True, blank=True)
-    width = models.DecimalField('Width', default=0, decimal_places=2, max_digits=9, null=True, blank=True)
-
-    # invoice = models.ForeignKey('Invoice', on_delete=models.CASCADE, null=True, blank=True)
-    invoice = models.OneToOneField('Invoice', on_delete=models.CASCADE, null=True)
+    prod_total = models.DecimalField('Line Total', default=0, decimal_places=2, max_digits=9)
+    block = models.CharField('Block No', max_length=55, null=True, blank=True)
+    length = models.DecimalField('Length', default=0, decimal_places=2, max_digits=5, null=True, blank=True)
+    width = models.DecimalField('Width', default=0, decimal_places=2, max_digits=5, null=True, blank=True)
+    invoice = models.ForeignKey('Invoice', on_delete=models.CASCADE, null=True, blank=True)
 
 
 class Invoice(models.Model):

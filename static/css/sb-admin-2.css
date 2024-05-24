@@ -47,6 +47,20 @@
     box-sizing: border-box;
 }
 
+/*.custom-col1 {*/
+/*    flex: 0 0 4.1667%; !* .5/12 * 100 *!*/
+/*    max-width: 4.1667%;*/
+/*}*/
+
+/*.custom-col2 {*/
+/*    flex: 0 0 6.25%; !* .75/12 * 100 *!*/
+/*    max-width: 6.25%;*/
+/*}*/
+
+/*.custom-col3 {*/
+/*    flex: 0 0 12.5%; !* 1.5/12 * 100 *!*/
+/*    max-width: 12.5%;*/
+/*}*/
 
 .alignRight {
     align-items: flex-end;
