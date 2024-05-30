@@ -2,6 +2,15 @@ from django.db import models
 
 
 class Contact(models.Model):
+    class Relation(models.TextChoices):
+        CUSTOMER = 'CUSTOMER', 'Customer'
+        DESIGNER = 'DESIGNER', 'Designer'
+        CONTRACTOR = 'CONTRACTOR', 'Contractor'
+        LEAD = 'LEAD', 'Lead'
+        VENDOR = 'VENDOR', 'Vendor'
+        FABRICATOR = 'FABRICATOR', 'Fabricator'
+        OTHER = 'OTHER', 'Other'
+
     first_name = models.CharField('First Name', max_length=20, blank=True)
     last_name = models.CharField('Last Name', max_length=20, blank=True)
     phone = models.CharField('Phone Number', max_length=10, blank=True)
@@ -14,16 +23,6 @@ class Contact(models.Model):
     zip = models.CharField('Zip Code', max_length=5, blank=True)
     notes = models.TextField('Contact Notes', blank=True)
     date_created = models.DateTimeField(auto_created=True, null=True, blank=True)
-
-    class Relation(models.TextChoices):
-        CUSTOMER = 'CUSTOMER', 'Customer'
-        DESIGNER = 'DESIGNER', 'Designer'
-        CONTRACTOR = 'CONTRACTOR', 'Contractor'
-        LEAD = 'LEAD', 'Lead'
-        VENDOR = 'VENDOR', 'Vendor'
-        FABRICATOR = 'FABRICATOR', 'Fabricator'
-        OTHER = 'OTHER', 'Other'
-
     relation = models.CharField('Relation', max_length=10, choices=Relation.choices, blank=True)
 
     def __str__(self):

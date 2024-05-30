@@ -193,3 +193,4 @@ class InvoiceCollectionView(FormCollectionView):
         context['invoiceline'] = self.invoice_line
         context['invoice'] = self.invoice
         return context
+

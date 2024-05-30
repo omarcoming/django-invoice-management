@@ -24,17 +24,15 @@
     <div id="#invoice-colllection-info" class="card-body collapse show" >
         <django-formset endpoint="{{ request.path }}" csrf-token="{{ csrf_token }}">
             {{ form_collection }}
-
             {% if add %}
                 <button type="button"
-                        df-click="submit({add: true}) -> proceed">{% translate "Add" %}</button>
+                        df-click="submit({add: true}) -> proceed">{% trans "Add" %}</button>
             {% else %}
                 <button type="button"
-                        df-click="submit({update: true}) -> proceed">{% translate "Update" %}</button>
+                        df-click="submit({update: true}) -> proceed">{% trans "Update" %}</button>
                 <button type="button"
-                        df-click="submit({delete: true}) -> proceed">{% translate "Delete" %}</button>
+                        df-click="submit({delete: true}) -> proceed">{% trans "Delete" %}</button>
             {% endif %}
-
         </django-formset>
     </div>
 

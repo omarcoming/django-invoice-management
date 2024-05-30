@@ -2,35 +2,31 @@
 {% load i18n %}
 <!-- INVOICE LINE Content Row -->
 {% block content %}
-
-
+    
     <!-- Card Header - Dropdown -->
     <div class="card-header">
-        <a data-toggle="collapse" href="#product-details-add" aria-expanded="true"
-           aria-controls="collapse-example" id="product-heading" class="d-block">
+        <a data-toggle="collapse" href="#invoiceline-add" aria-expanded="true"
+           aria-controls="collapse-example" id="invoiceline-heading" class="d-block">
             <label class="m-0 font-weight-bold text-primary">Add Invoice Line</label>
             <i class="fa fa-chevron-down pull-left" style="font-size:16px"></i>
         </a>
     </div>
     <!-- INVOICE LINE FORM -->
-    <div id="product-details-add" class="card-body collapse show">
+    <div id="invoiceline-add" class="card-body collapse show">
         {% load render_form from formsetify %}
         <django-formset endpoint="{{ request.path }}" csrf-token="{{ csrf_token }}">
             {% render_form form %}
-
             {% if add %}
                 <button type="button"
-                        df-click="submit({add: true}) -> proceed">{% translate "Add" %}</button>
+                        df-click="submit({add: true}) -> proceed">{% trans "Add" %}</button>
             {% else %}
                 <button type="button"
-                        df-click="submit({update: true}) -> proceed">{% translate "Update" %}</button>
+                        df-click="submit({update: true}) -> proceed">{% trans "Update" %}</button>
                 <button type="button"
-                        df-click="submit({delete: true}) -> proceed">{% translate "Delete" %}</button>
+                        df-click="submit({delete: true}) -> proceed">{% trans "Delete" %}</button>
             {% endif %}
         </django-formset>
     </div>
-
-
 {% endblock %}
 
 

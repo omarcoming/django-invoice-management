@@ -11,7 +11,7 @@ urlpatterns = [
 
     path('invoices', InvoiceListView.as_view(), name='invoice-list'),  # list view not handled here
     path('invoice/add/', InvoiceCollectionView.as_view(extra_context={'add': True}), name='invoice-add', ),
-    path('invoice/<int:pk>/', InvoiceCollectionView.as_view(extra_context={'add': False}), name='invoice-edit', ),
+    path('invoice/<int:pk>/', InvoiceCollectionView.as_view(extra_context={'change': True}), name='invoice-edit', ),
 
     # path('cc', ContactListView.as_view(), name='cc-list'),  # list view not handled here
     # path('cc/add/', ContactCollectionView.as_view(extra_context={'add': True}), name='cc-add', ),
@@ -29,7 +29,6 @@ urlpatterns = [
     path('prodetail/add/', InvoiceLineEditView.as_view(extra_context={'add': True}), name='invoicelines-add'),
     path('prodetail/<int:pk>/', InvoiceLineEditView.as_view(extra_context={'add': False}), name='invoicelines-edit'),
 
-    path('product-collection/', InvoiceLineCollectionView.as_view(), name='product-collection'),
-    path('invoice-collection/', InvoiceCollectionView.as_view(), name='invoice-collection'),
+    path('invoice-line/', InvoiceLineCollectionView.as_view(extra_context={'add': True}), name='invoice-line'),
 
 ]

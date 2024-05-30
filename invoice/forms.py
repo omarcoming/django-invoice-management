@@ -241,6 +241,7 @@ class ContactForm(ModelForm):
             })
         }
 
+
 class ContactCollection(FormCollection):
     min_siblings = 1
     contact = ContactForm()
