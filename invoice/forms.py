@@ -4,7 +4,6 @@ from django.forms import fields, ModelForm
 from django.forms.models import construct_instance, model_to_dict
 from django import forms
 
-
 from formset.collection import FormCollection
 from formset.renderers.bootstrap import FormRenderer
 from formset.fieldset import Fieldset, FieldsetMixin
@@ -144,14 +143,14 @@ class ContactForm(ModelForm):
         form_css_classes='row border p-1 m-1',
         field_css_classes={
             '*': 'mb-1 col-4',
-            'first_name' : 'mb-1 col-3',
-            'last_name' : 'mb-1 col-3',
+            'first_name': 'mb-1 col-3',
+            'last_name': 'mb-1 col-3',
             'relation': 'mb-1 col-2',
-            'company' : 'mb-1 col-2',
-            'phone' : 'mb-1 col-2',
-            'alt_phone' : 'mb-1 col-2',
-            'email' : 'mb-1 col-2',
-            'address' : 'mb-1 col-2',
+            'company': 'mb-1 col-2',
+            'phone': 'mb-1 col-2',
+            'alt_phone': 'mb-1 col-2',
+            'email': 'mb-1 col-2',
+            'address': 'mb-1 col-2',
             'city': 'mb-1 col-3',
             'state': 'mb-1 col-1',
             'zip': 'mb-1 col-2',
@@ -161,6 +160,7 @@ class ContactForm(ModelForm):
         },
     )
     legend = 'Contact'
+
     # hide_if = 'ext_contact.extant'
 
     class Meta:
@@ -248,60 +248,8 @@ class ContactCollection(FormCollection):
     legend = 'SOLD TO:'
     add_label = 'Add Designer/Contractor'
 
-class ProductForm(ModelForm):
-    id = forms.IntegerField(required=False, widget=forms.HiddenInput)
-    default_renderer = FormRenderer(
-        form_css_classes='row',
-        field_css_classes={
-            'unit': 'm-1 col-1',
-            'prod_name': 'm-1 col-3',
-            '*': 'm-1 col-2',
-        }
-    )
 
-    class Meta:
-        model = Product
-        fields = [
-            'unit',
-            'name',
-            'material',
-            'vendor',
-            'id',
-        ]
-        widgets = {
-            'unit': forms.TextInput(attrs={
-                # 'class': 'form-control product-input mb-1 col-1',
-                'class': 'form-control',
-                'id': 'unit',
-            }),
-            'name': Selectize(
-                search_lookup='product_name__istartswith',
-                attrs={
-                    'data-minimum-input-length': 2,
-                    'allowClear': 'true',
-                    'data-placeholder': 'Find Product',
-                    'dropdownAutoWidth': 'true',
-                    'class': 'form-control product-input',
-                }
-            ),
-            # 'name': forms.TextInput(attrs={
-            #     # 'class': 'form-control product-input mb-1 col-3',
-            #     'class': 'form-control',
-            #     'id': 'prod_name',
-            # }),
-            'material': forms.Select(attrs={
-                # 'class': 'form-control product-input mb-1 col-2',
-                'class': 'form-control',
-                'id': 'material',
-            }),
-            'vendor': forms.TextInput(attrs={
-                'class': 'form-control',
-                'id': 'vendor',
-                'value': 'Q-ARTS',
-            }),
-        }
-
-class InvoiceLineForm(ModelForm):
+class LineForm(ModelForm):
     id = forms.IntegerField(required=False, widget=forms.HiddenInput)
     default_renderer = FormRenderer(
         form_css_classes='row border p-1 m-1',
@@ -320,34 +268,27 @@ class InvoiceLineForm(ModelForm):
     )
 
     class Meta:
-        model = InvoiceLine
+        model = Line
         fields = [
+            'payment',
+            # 'date_created',
             'unit',
             'qty',
             'product',
             'material',
             'vendor',
-
             'block',
             'length',
             'width',
-
             'price',
             'prod_total',
-
             'id',
         ]
         widgets = {
-            # 'product': Selectize(
-            #     search_lookup='product_name__istartswith',
-            #     attrs={
-            #         'data-minimum-input-length': 2,
-            #         'allowClear': 'true',
-            #         'data-placeholder': 'Find Product',
-            #         'dropdownAutoWidth': 'true',
-            #         'class': 'form-control product-input',
-            #     }
-            # ),
+            'payment': forms.HiddenInput(attrs={
+                'class': 'form-control',
+                'id': 'payment',
+            }),
             'unit': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'unit',
@@ -402,30 +343,52 @@ class InvoiceLineForm(ModelForm):
             }),
         }
 
+        # def model_to_dict(self, payment):
+        #     try:
+        #         return model_to_dict(payment.line, fields=self._meta.fields, exclude=self._metal.exclude)
+        #     except Line.DoesNotExist:
+        #         return {}
+        #
+        # def construct_instance(self, payment):
+        #     try:
+        #         line = payment.line
+        #     except Line.DoesNotExist:
+        #         line = Line(payment=payment)
+        #     form = LineForm(data=self.cleaned_data, instance=line)
+        #     if form.is_valid():
+        #         construct_instance(form, line)
+        #         form.save()
 
-class InvoiceLineCollection(FormCollection):
+
+
+class LineCollection(FormCollection):
     min_siblings = 1
-    invoiceline = InvoiceLineForm()
+    line = LineForm()
     legend = 'LINE ITEMS:'
-    add_label = 'Add Product'
-    related_field = 'product'
+    add_label = 'Add line'
+    related_field = 'payment'
 
     def retrieve_instance(self, data):
-        if data := data.get('invoiceline'):
+        if data := data.get('line'):
             try:
-                return self.instance.invoicelines.get(id=data.get('id') or 0)
+                return self.instance.lines.get(id=data.get('id') or 0)
             except(AttributeError, Product.DoesNotExist, ValueError):
-                return InvoiceLine(name=data.get('name'), product=self.instance)
+                return Line(
+                    payment=self.instance,
+                    unit=data.get('unit'),
+                    qty=data.get('qty'),
+                    product=data.get('product'),
+                    material=data.get('material'),
+                    vendor=data.get('vendor'),
+                    block=data.get('block'),
+                    length=data.get('length'),
+                    width=data.get('width'),
+                    price=data.get('price'),
+                    prod_total=data.get('prod_total'),
+                )
 
 
-# class ProductCollection(FormCollection):
-#     extra_siblings = 0
-#     product = ProductForm()
-#     product_detail = InvoiceLineCollection()
-
-
-class InvoiceForm(ModelForm):
-    id = forms.IntegerField(required=False, widget=forms.HiddenInput)
+class PaymentForm(ModelForm):
     default_renderer = FormRenderer(
         form_css_classes='row',
         field_css_classes={'*': 'mb-1 col-4',
@@ -433,7 +396,7 @@ class InvoiceForm(ModelForm):
     )
 
     class Meta:
-        model = Invoice
+        model = Payment
         fields = [
             'payment_type',
             'deposit',
@@ -444,7 +407,6 @@ class InvoiceForm(ModelForm):
             'invoice_notes',
             'total',
             'contact',
-            'id',
         ]
         exclude = ['contact']
         widgets = {
@@ -503,8 +465,79 @@ class InvoiceForm(ModelForm):
         }
 
 
+class PaymentCollection(FormCollection):
+    lines = LineCollection()
+    payment = PaymentForm()
+    # related_field = 'contact'
+
+    def retrieve_instance(self, data):
+        if data := self.data.get('payment'):
+            return Payment(
+                payment_type=data.get('payment_type'),
+                deposit=data.get('deposit'),
+                subtotal=data.get('subtotal'),
+                payment_status=data.get('payment_status'),
+                balance=data.get('balance'),
+                tax=data.get('tax'),
+                invoice_notes=data.get('invoice_notes'),
+                total=data.get('total'),
+                # contact=self.instance,
+            )
+
+
 class InvoiceCollection(FormCollection):
     contact = ContactCollection()
-    # contact = ContactForm()
-    product = InvoiceLineCollection()
-    invoice = InvoiceForm()
+    payment = PaymentCollection()
+
+
+class ProductForm(ModelForm):
+    id = forms.IntegerField(required=False, widget=forms.HiddenInput)
+    default_renderer = FormRenderer(
+        form_css_classes='row',
+        field_css_classes={
+            'unit': 'm-1 col-1',
+            'prod_name': 'm-1 col-3',
+            '*': 'm-1 col-2',
+        }
+    )
+
+    class Meta:
+        model = Product
+        fields = [
+            'name',
+            'material',
+            'vendor',
+            'id',
+        ]
+        widgets = {
+            # 'name': Selectize(
+            #     search_lookup='product_name__istartswith',
+            #     attrs={
+            #         'data-minimum-input-length': 2,
+            #         'allowClear': 'true',
+            #         'data-placeholder': 'Find Product',
+            #         'dropdownAutoWidth': 'true',
+            #         'class': 'form-control product-input',
+            #     }
+            # ),
+            'name': forms.TextInput(attrs={
+                # 'class': 'form-control product-input mb-1 col-3',
+                'class': 'form-control',
+                'id': 'prod_name',
+            }),
+            'material': forms.Select(attrs={
+                # 'class': 'form-control product-input mb-1 col-2',
+                'class': 'form-control',
+                'id': 'material',
+            }),
+            'vendor': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'vendor',
+                'value': 'Q-ARTS',
+            }),
+        }
+
+# class ProductCollection(FormCollection):
+#     extra_siblings = 0
+#     product = ProductForm()
+#     product_detail = LineCollection()

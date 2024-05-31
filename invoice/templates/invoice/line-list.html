@@ -1,9 +1,13 @@
 {% extends "invoice/base/base.html" %}
-<!-- CONTRACTOR LIST - Content Row -->
+<!-- INVOICE LINE LIST - Content Row -->
 {% block content %}
+<div class="row">
+    <!-- Area Chart -->
+    <div class="col-xl-12 col-lg-7">
+        <div class="card shadow mb-4">
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <label class="m-0 font-weight-bold text-primary">Invoices</label>
+                <label class="m-0 font-weight-bold text-primary">Invoice Lines</label>
             </div>
             <!-- Card Body -->
             <div class="card-body">
@@ -12,32 +16,29 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Date Created</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-{#                                <th>Delete</th>#}
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                                <th>Block Number</th>
+                                <th>Length</th>
+                                <th>Width</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for invoice in object_list %}
+                            {% for line in object_list %}
                             <tr>
-                                <td style="padding: 0.45em;">{{invoice.id}}</td>
-                                <td style="padding: 0.45em;">{{invoice.date_created}}</td>
-
-                                <td style="padding: 0.45em;">{{invoice.}}</td>
-                                <td style="padding: 0.45em;">{{invoice.}}</td>
-                                <td style="padding: 0.45em;">{{invoice.}}</td>
-                                <td style="padding: 0.45em;">{{invoice.}}</td>
-                                <td style="padding: 0.45em;">{{invoice.}}</td>
-                                <td style="padding: 0.45em;">{{invoice.}}</td>
+                                <td style="padding: 0.45em;">{{ line.id}}</td>
+                                <td style="padding: 0.45em;">{{ line.product}}</td>
+                                <td style="padding: 0.45em;">{{ line.qty}}</td>
+                                <td style="padding: 0.45em;">{{ line.price}}</td>
+                                <td style="padding: 0.45em;">{{ line.prod_total}}</td>
+                                <td style="padding: 0.45em;">{{ line.block}}</td>
+                                <td style="padding: 0.45em;">{{ line.length}}</td>
+                                <td style="padding: 0.45em;">{{ line.width}}</td>
 
                                 <td style="padding: 0;">
-                                    <a href="{% url 'invoice-edit' invoice.id %}" class="btn btn-outline-primary"
+                                    <a href="{% url 'lineform-list' %}" class="btn btn-outline-primary"
                                        style="width: 100%; height: 100%; border-radius: 0">
                                         <i class="fas fa-edit"></i>
                                     </a>
@@ -54,5 +55,7 @@
                     </table>
                 </div>
             </div>
-
+        </div>
+    </div>
+</div>
 {% endblock %}

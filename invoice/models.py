@@ -22,14 +22,13 @@ class Contact(models.Model):
     state = models.CharField('State', max_length=2, blank=True)
     zip = models.CharField('Zip Code', max_length=5, blank=True)
     notes = models.TextField('Contact Notes', blank=True)
-    date_created = models.DateTimeField(auto_created=True, null=True, blank=True)
     relation = models.CharField('Relation', max_length=10, choices=Relation.choices, blank=True)
-
+    date_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
 
-class InvoiceLine(models.Model):
+class Line(models.Model):
     class Material(models.TextChoices):
         NATURAL_QUARTZITE = 'NATURAL QUARTZITE', 'Natural Quartzite'
         ENGINEERED_QUARTZ = 'ENGINEERED QUARTZ', 'Engineered Quartz'
@@ -64,10 +63,15 @@ class InvoiceLine(models.Model):
     block = models.CharField('Block #', max_length=15, null=True, blank=True)
     length = models.DecimalField('Length', default=0, decimal_places=2, max_digits=5, null=True, blank=True)
     width = models.DecimalField('Width', default=0, decimal_places=2, max_digits=5, null=True, blank=True)
-    invoice = models.ForeignKey('Invoice', on_delete=models.CASCADE, null=True, blank=True)
+    payment = models.ForeignKey('Payment', on_delete=models.CASCADE, null=True, blank=True, related_name='lines')
+    date_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
+    class Meta:
+        verbose_name = 'Line'
+        verbose_name_plural = 'Lines'
+        unique_together = ['date_created', 'payment']
 
-class Invoice(models.Model):
+class Payment(models.Model):
     class Status(models.TextChoices):
         BALANCE = 'BALANCE'
         PAID = 'PAID'
@@ -78,25 +82,28 @@ class Invoice(models.Model):
         CHECK = 'CHECK'
         CARD = 'CARD'
 
-    # invoice_date_created = models.DateTimeField(auto_now_add=True, default=datetime.datetime.now())
-    date_created = models.DateTimeField(auto_created=True, null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     payment_type = models.CharField('Payment Method', max_length=20, blank=True, choices=PaymentType.choices)
-    payment_status = models.CharField('Payment Status', max_length=10, blank=True, choices=Status.choices)
-    subtotal = models.DecimalField('Subtotal', decimal_places=2, max_digits=9, default=0)
-    tax = models.DecimalField('Sales Tax', decimal_places=2, max_digits=9, default=0)
-    total = models.DecimalField('Total', decimal_places=2, max_digits=9, default=0)
     deposit = models.DecimalField('Deposit', decimal_places=2, max_digits=9, default=0)
+    subtotal = models.DecimalField('Subtotal', decimal_places=2, max_digits=9, default=0)
+    payment_status = models.CharField('Payment Status', max_length=10, blank=True, choices=Status.choices)
     balance = models.DecimalField('Balance', decimal_places=2, max_digits=9, default=0)
+    tax = models.DecimalField('Sales Tax', decimal_places=2, max_digits=9, default=0)
     invoice_notes = models.TextField('Notes', blank=True)
+    total = models.DecimalField('Total', decimal_places=2, max_digits=9, default=0)
+    contact = models.ForeignKey(Contact, on_delete=models.CASCADE, null=True, blank=True, related_name='payments')
 
-    contact = models.ForeignKey(Contact, on_delete=models.CASCADE, null=True, blank=True)
+    class Meta:
+        verbose_name = 'Payment'
+        verbose_name_plural = 'Payments'
 
     def __str__(self):
         return str(self.id)
 
     def calculate_tax(self, tax_rate=.0775):
         return self.subtotal * tax_rate
+
 
 class Product(models.Model):
     class Material(models.TextChoices):
@@ -121,10 +128,9 @@ class Product(models.Model):
         SATIN = 'SATIN'
 
     name = models.CharField('Product', max_length=255)
-    unit = models.CharField('Unit', default='ea', max_length=255)
     vendor = models.CharField('Vendor', max_length=255, blank=True)
     material = models.CharField('Material', max_length=255, choices=Material.choices, blank=True)
     product_is_delete = models.BooleanField(default=False)
-
+    date_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     def __str__(self):
         return str(self.name)

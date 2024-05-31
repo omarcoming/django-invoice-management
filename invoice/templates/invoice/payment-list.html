@@ -1,0 +1,62 @@
+{% extends "invoice/base/base.html" %}
+<!-- CONTRACTOR LIST - Content Row -->
+{% block content %}
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <label class="m-0 font-weight-bold text-primary">Payments</label>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date Created</th>
+                                <th>Contact</th>
+                                <th>Payment Type</th>
+                                <th>Payment Status</th>
+                                <th>Subtotal</th>
+                                <th>Tax</th>
+                                <th>Total</th>
+                                <th>Deposit</th>
+                                <th>Balance</th>
+                                <th>Notes</th>
+{#                                <th>Delete</th>#}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in object_list %}
+                            <tr>
+                                <td style="padding: 0.45em;">{{payment.id}}</td>
+                                <td style="padding: 0.45em;">{{payment.date_created}}</td>
+                                <td style="padding: 0.45em;">{{payment.contact}}</td>
+                                <td style="padding: 0.45em;">{{payment.payment_type}}</td>
+                                <td style="padding: 0.45em;">{{payment.payment_status}}</td>
+                                <td style="padding: 0.45em;">{{payment.subtotal}}</td>
+                                <td style="padding: 0.45em;">{{payment.tax}}</td>
+                                <td style="padding: 0.45em;">{{payment.total}}</td>
+                                <td style="padding: 0.45em;">{{payment.deposit}}</td>
+                                <td style="padding: 0.45em;">{{payment.balance}}</td>
+                                <td style="padding: 0.45em;">{{payment.invoice_notes}}</td>
+                                
+                                <td style="padding: 0;">
+                                    <a href="{% url 'payment-edit' payment.id %}" class="btn btn-outline-primary"
+                                       style="width: 100%; height: 100%; border-radius: 0">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+{#                                <td style="padding: 0;">#}
+{#                                    <a href="{% url 'delete_customer' i.id %}" class="btn btn-outline-danger"#}
+{#                                       style="width: 100%; height: 100%; border-radius: 0">#}
+{#                                        <i class="fas fa-trash-alt"></i>#}
+{#                                    </a>#}
+{#                                </td>#}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+{% endblock %}

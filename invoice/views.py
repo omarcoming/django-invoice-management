@@ -15,20 +15,7 @@ from .forms import *
 from .models import *
 
 
-# class Totals:
-#     total_product = Product.objects.count()
-#     total_contact = Contact.objects.count()
-#     total_invoice = Invoice.objects.count()
-#
-#     @classmethod
-#     def total_income(cls):
-#         allInvoice = Invoice.objects.all()
-#         totalIncome = 0
-#         for curr in allInvoice:
-#             totalIncome += curr.total
-#         return totalIncome
-
-class EditView(FormView):
+class EditView(UpdateView, FormViewMixin):
     def get_object(self, queryset=None):
         if queryset is None:
             queryset = self.get_queryset()
@@ -37,7 +24,6 @@ class EditView(FormView):
 
     def get_success_url(self):
         model = self.model._meta.model_name
-        # if pk := self.kwargs.get('pk'):
         if pk := self.object.id:
             return reverse(f'{model}-edit', kwargs={'pk': pk})
         else:
@@ -67,7 +53,7 @@ class TotalsListView(ListView):
         context = super().get_context_data(**kwargs)
         # context['total_product'] = Totals.total_product
         # context['total_contact'] = Totals.total_contact
-        # context['total_invoice'] = Totals.total_invoice
+        # context['total_payment'] = Totals.total_payment
         # context['total_income'] = Totals.total_income
         return context
 
@@ -77,12 +63,11 @@ class ContactListView(TotalsListView):
     template_name = 'invoice/contact-list.html'
 
 
-class ContactEditView(EditView, UpdateView):
+class ContactEditView(EditView):
     model = Contact
     template_name = 'invoice/contact.html'
     form_class = ContactForm
     extra_context = None
-
 
 
 # class ContactCollectionView(FormCollectionView):
@@ -90,12 +75,64 @@ class ContactEditView(EditView, UpdateView):
 #     template_name = 'invoice/contact-collection.html'
 
 
+class LineListView(TotalsListView):
+    model = Line
+    template_name = 'invoice/line-list.html'
+
+
+class LineEditView(EditView):
+    model = Line
+    template_name = 'invoice/line.html'
+    form_class = LineForm
+    extra_context = None
+
+
+
+
+class LineCollectionView(EditCollectionView):
+    model = Line
+    collection_class = LineCollection
+    template_name = 'invoice/line.html'
+
+
+class PaymentListView(TotalsListView):
+    model = Payment
+    template_name = 'invoice/payment-list.html'
+
+
+class PaymentEditView(EditView):
+    model = Payment
+    template_name = 'invoice/payment.html'
+    form_class = PaymentForm
+    extra_context = None
+
+
+
+class PaymentCollectionView(EditCollectionView):
+    model = Payment
+    collection_class = PaymentCollection
+    template_name = 'invoice/payment-collection.html'
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+            if self.kwargs:
+                return queryset.get(pk=self.kwargs['pk'])
+
+
+
+# TODO: implement EditCollectionView?
+class InvoiceCollectionView(FormCollectionView):
+    collection_class = InvoiceCollection
+    template_name = 'invoice/invoice-collection.html'
+    print('')
+
 class ProductListView(TotalsListView):
     model = Product
     template_name = 'invoice/product-list.html'
 
 
-class ProductEditView(EditView, UpdateView, IncompleteSelectResponseMixin):
+class ProductEditView(EditView, IncompleteSelectResponseMixin):
     model = Product
     template_name = 'invoice/product.html'
     form_class = ProductForm
@@ -106,25 +143,6 @@ class ProductEditView(EditView, UpdateView, IncompleteSelectResponseMixin):
     #         return reverse('product-edit', kwargs={'pk': pk})
     #     else:
     #         return reverse('product-list')
-
-
-class InvoicelineListView(TotalsListView):
-    model = InvoiceLine
-    template_name = 'invoice/invoiceline-list.html'
-
-
-class InvoiceLineEditView(EditView, UpdateView, IncompleteSelectResponseMixin):
-    model = InvoiceLine
-    template_name = 'invoice/invoiceline.html'
-    form_class = InvoiceLineForm
-    extra_context = None
-
-    # def get_success_url(self):
-    #     if pk := self.object.id:
-    #         return reverse('prodetail-edit', kwargs={'pk': pk})
-    #     else:
-    #         return reverse('prodetails-list')
-
 
 # class ProductCollectionView(EditCollectionView, IncompleteSelectResponseMixin):
 #     collection_class = ProductCollection
@@ -146,51 +164,15 @@ class InvoiceLineEditView(EditView, UpdateView, IncompleteSelectResponseMixin):
 #         # context['product_detail'] = self.product_detail
 #         return context
 
-class InvoiceLineCollectionView(EditCollectionView):
-    collection_class = InvoiceLineCollection
-    template_name = 'invoice/invoiceline.html'
-    invoice_line = InvoiceLineForm()
-
-    def get(self, request, *args, **kwargs):
-        """Handle GET requests: instantiate blank versions of the forms in the collection."""
-        return self.render_to_response(self.get_context_data())
-
-class InvoiceListView(TotalsListView):
-    model = Invoice
-    template_name = 'invoice/invoice-list.html'
-
-
-class InvoiceEditView(EditView, UpdateView, IncompleteSelectResponseMixin):
-    model = Invoice
-    template_name = 'invoice/invoice.html'
-    form_class = InvoiceForm
-    extra_context = None
-
-    def get_success_url(self):
-        if pk := self.object.id:
-            return reverse('invoice-edit', kwargs={'pk': pk})
-        else:
-            return reverse('invoice-list')
-
-
-# implement EditCollectionView
-class InvoiceCollectionView(FormCollectionView):
-    collection_class = InvoiceCollection
-    template_name = 'invoice/invoice-collection.html'
-
-    contact = ContactForm()
-    invoice_line = InvoiceLineCollection()
-    invoice = InvoiceForm()
-
-    def get(self, request, *args, **kwargs):
-        """Handle GET requests: instantiate blank versions of the forms in the collection."""
-        return self.render_to_response(self.get_context_data())
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form_collection'] = self.get_form_collection()
-        context['contact'] = self.contact
-        context['invoiceline'] = self.invoice_line
-        context['invoice'] = self.invoice
-        return context
-
+# class Totals:
+#     total_product = Product.objects.count()
+#     total_contact = Contact.objects.count()
+#     total_invoice = Invoice.objects.count()
+#
+#     @classmethod
+#     def total_income(cls):
+#         allInvoice = Invoice.objects.all()
+#         totalIncome = 0
+#         for curr in allInvoice:
+#             totalIncome += curr.total
+#         return totalIncome
