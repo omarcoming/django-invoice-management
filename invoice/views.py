@@ -70,9 +70,10 @@ class ContactEditView(EditView):
     extra_context = None
 
 
-# class ContactCollectionView(FormCollectionView):
-#     collection_class = ContactCollection
-#     template_name = 'invoice/contact-collection.html'
+class ContactCollectionView(EditCollectionView):
+    model = Contact
+    collection_class = ContactCollection
+    template_name = 'invoice/contact-collection.html'
 
 
 class LineListView(TotalsListView):
@@ -85,8 +86,6 @@ class LineEditView(EditView):
     template_name = 'invoice/line.html'
     form_class = LineForm
     extra_context = None
-
-
 
 
 class LineCollectionView(EditCollectionView):
@@ -107,7 +106,6 @@ class PaymentEditView(EditView):
     extra_context = None
 
 
-
 class PaymentCollectionView(EditCollectionView):
     model = Payment
     collection_class = PaymentCollection
@@ -120,12 +118,29 @@ class PaymentCollectionView(EditCollectionView):
                 return queryset.get(pk=self.kwargs['pk'])
 
 
+# class InvoiceListView(TotalsListView):
+#     model = Invoice
+#     template_name =
+
+class InvoiceEditView(EditView):
+    model = Invoice
+    template_name = 'invoice/invoice.html'
+    form_class = InvoiceForm
+    extra_context = None
+
 
 # TODO: implement EditCollectionView?
-class InvoiceCollectionView(FormCollectionView):
+class InvoiceCollectionView(EditCollectionView):
+    model = Invoice
     collection_class = InvoiceCollection
     template_name = 'invoice/invoice-collection.html'
-    print('')
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+            if self.kwargs:
+                return queryset.get(pk=self.kwargs['pk'])
+
 
 class ProductListView(TotalsListView):
     model = Product

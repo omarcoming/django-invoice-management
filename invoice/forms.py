@@ -12,132 +12,6 @@ from formset.widgets import Selectize
 from .models import *
 
 
-# class ContactForm(Fieldset):
-#     legend = 'Contact'
-#
-#     default_renderer = FormRenderer(
-#         fieldset_css_classes='row',
-#         field_css_classes={
-#             '*': 'mb-1 col-4',
-#             'city': 'mb-1 col-3',
-#             'state': 'mb-1 col-1',
-#             'contact_notes': 'mb-5 col-12',
-#         }
-#     )
-#     first_name = forms.CharField(
-#         required=False,
-#         widget=forms.TextInput(
-#             attrs={
-#                 'class': 'form-control',
-#                 'id': 'first_name',
-#                 'placeholder': 'Contact First Name',
-#             })
-#     )
-#     last_name = forms.CharField(
-#         required=False,
-#         widget=forms.TextInput(
-#             attrs={
-#                 'class': 'form-control',
-#                 'id': 'last_name',
-#                 'placeholder': 'Contact Last Name',
-#             })
-#     )
-#     phone = forms.CharField(
-#         required=False,
-#         widget=forms.NumberInput(
-#             attrs={
-#                 'class': 'form-control',
-#                 'id': 'phone',
-#             })
-#     )
-#     alt_phone = forms.CharField(
-#         required=False,
-#         widget=forms.NumberInput(
-#             attrs={
-#                 'class': 'form-control',
-#                 'id': 'phone',
-#             })
-#     )
-#
-#     company = forms.CharField(
-#         required=False,
-#         widget=forms.TextInput(
-#             attrs={
-#                 'class': 'form-control',
-#                 'id': 'company',
-#             })
-#     )
-#
-#     email = forms.EmailField(
-#         required=False,
-#         widget=forms.EmailInput(
-#             attrs={
-#                 'class': 'form-control',
-#                 'id': 'email',
-#             })
-#     )
-#
-#     address = forms.CharField(
-#         required=False,
-#         widget=forms.TextInput(
-#             attrs={
-#                 'class': 'form-control',
-#                 'id': 'address',
-#             })
-#     )
-#
-#     city = forms.CharField(
-#         required=False,
-#         widget=forms.TextInput(
-#             attrs={
-#                 'class': 'form-control',
-#                 'id': 'city',
-#             })
-#     )
-#
-#     state = forms.CharField(
-#         required=False,
-#         widget=forms.TextInput(
-#             attrs={
-#                 'class': 'form-control',
-#                 'id': 'state',
-#                 'value': 'CA',
-#             })
-#     )
-#
-#     zip = forms.CharField(
-#         required=False,
-#         widget=forms.TextInput(
-#             attrs={
-#                 'class': 'form-control',
-#                 'id': 'zip',
-#             })
-#     )
-#
-#     contact_notes = forms.CharField(
-#         required=False,
-#         widget=forms.Textarea(
-#             attrs={
-#                 'class': 'form-control',
-#                 'id': 'contact_notes',
-#                 'placeholder': 'Enter contact notes',
-#                 'rows': '1'
-#             })
-#     )
-#
-#     date_created = forms.CharField(
-#         required=False,
-#         widget=forms.DateTimeInput(
-#             attrs={
-#                 'class': 'form-control',
-#                 'id': 'date_created',
-#                 'value': datetime.now(),
-#                 'hidden': True,
-#             }),
-#         label=False,
-#     )
-
-
 class ContactForm(ModelForm):
     default_renderer = FormRenderer(
         form_css_classes='row border p-1 m-1',
@@ -162,10 +36,12 @@ class ContactForm(ModelForm):
     legend = 'Contact'
 
     # hide_if = 'ext_contact.extant'
-
+    #
     class Meta:
         model = Contact
         fields = [
+            'invoice',
+            
             'first_name',
             'last_name',
             'relation',
@@ -180,6 +56,12 @@ class ContactForm(ModelForm):
             'notes',
         ]
         widgets = {
+            'invoice': forms.HiddenInput(attrs={
+                'class': 'form-control',
+                'id': 'invoice',
+            }),
+                
+            
             'first_name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'first_name',
@@ -247,6 +129,29 @@ class ContactCollection(FormCollection):
     contact = ContactForm()
     legend = 'SOLD TO:'
     add_label = 'Add Designer/Contractor'
+    related_field = 'invoice'
+    
+    def retrieve_instance(self, data):
+        if data := data.get('contact'):
+            try:
+                return self.instance.contacts.get(id=data.get('id') or 0)
+            except(AttributeError, Contact.DoesNotExist, ValueError):
+                return Contact(
+                    invoice=self.instance,
+
+                    first_name=data.get('first_name'),
+                    last_name=data.get('last_name'),
+                    relation=data.get('relation'),
+                    company=data.get('company'),
+                    phone=data.get('phone'),
+                    alt_phone=data.get('alt_phone'),
+                    email=data.get('email'),
+                    address=data.get('address'),
+                    city=data.get('city'),
+                    state=data.get('state'),
+                    zip=data.get('zip'),
+                    notes=data.get('notes'),
+                )
 
 
 class LineForm(ModelForm):
@@ -360,7 +265,6 @@ class LineForm(ModelForm):
         #         form.save()
 
 
-
 class LineCollection(FormCollection):
     min_siblings = 1
     line = LineForm()
@@ -372,7 +276,7 @@ class LineCollection(FormCollection):
         if data := data.get('line'):
             try:
                 return self.instance.lines.get(id=data.get('id') or 0)
-            except(AttributeError, Product.DoesNotExist, ValueError):
+            except(AttributeError, Line.DoesNotExist, ValueError):
                 return Line(
                     payment=self.instance,
                     unit=data.get('unit'),
@@ -398,18 +302,23 @@ class PaymentForm(ModelForm):
     class Meta:
         model = Payment
         fields = [
+            # 'invoice',
             'payment_type',
             'deposit',
             'subtotal',
             'payment_status',
             'balance',
             'tax',
-            'invoice_notes',
+            'notes',
             'total',
-            'contact',
+
         ]
-        exclude = ['contact']
+        # exclude = ['contact']
         widgets = {
+            # 'invoice': forms.HiddenInput(attrs={
+            #     'class': 'form-control',
+            #     'id': 'invoice',
+            # }),
             'payment_type': forms.Select(attrs={
                 'class': 'form-control',
                 'id': 'payment_type',
@@ -456,7 +365,7 @@ class PaymentForm(ModelForm):
                 'type': 'number',
                 'readonly': 'True'
             }),
-            'invoice_notes': forms.Textarea(attrs={
+            'notes': forms.Textarea(attrs={
                 'class': 'form-control',
                 'id': 'invoice_notes',
                 'placeholder': 'Enter notes',
@@ -464,28 +373,88 @@ class PaymentForm(ModelForm):
             }),
         }
 
+        # def is_valid(self):
+        #     valid = super().is_valid()
+        #     return valid
+
+        # def model_to_dict(self, invoice):
+        #     try:
+        #         return model_to_dict(invoice.payment, fields=self._meta.fields, exclude=self._meta.exclude)
+        #     except Payment.DoesNotExist:
+        #         return {}
+        #
+        # def construct_instance(self, invoice):
+        #     try:
+        #         payment = invoice.payment
+        #     except Payment.DoesNotExist:
+        #         payment = Payment(invoice=invoice)
+        #     form = PaymentForm(data=self.cleaned_data, instance=payment)
+        #     if form.is_valid():
+        #         construct_instance(form, payment)
+        #         form.save()
+
 
 class PaymentCollection(FormCollection):
     lines = LineCollection()
     payment = PaymentForm()
-    # related_field = 'contact'
 
     def retrieve_instance(self, data):
         if data := self.data.get('payment'):
             return Payment(
+                # invoice=self.instance,
                 payment_type=data.get('payment_type'),
                 deposit=data.get('deposit'),
                 subtotal=data.get('subtotal'),
                 payment_status=data.get('payment_status'),
                 balance=data.get('balance'),
                 tax=data.get('tax'),
-                invoice_notes=data.get('invoice_notes'),
+                notes=data.get('notes'),
                 total=data.get('total'),
-                # contact=self.instance,
             )
 
 
+class InvoiceForm(ModelForm):
+    default_renderer = FormRenderer(
+        form_css_classes='row',
+        field_css_classes={'*': 'mb-1 col-4', }
+    )
+
+    class Meta:
+        model = Invoice
+        fields = [
+            'notes',
+        ]
+
+        widgets = {
+            # 'payment': forms.HiddenInput(attrs={
+            #     'class': 'form-control',
+            #     'id': 'payment',
+            # }),
+            'notes': forms.Textarea(attrs={
+                'class': 'form-control',
+                'id': 'notes',
+            }),
+        }
+
+        def model_to_dict(self, payment):
+            try:
+                return model_to_dict(payment.invoice, fields=self._meta.fields, exclude=self._meta.exclude)
+            except Invoice.DoesNotExist:
+                return {}
+
+        def construct_instance(self, payment):
+            try:
+                invoice = payment.invoice
+            except Invoice.DoesNotExist:
+                invoice = Invoice(payment=payment)
+            form = InvoiceForm(data=self.cleaned_data, instance=invoice)
+            if form.is_valid():
+                construct_instance(form, invoice)
+                form.save()
+
+
 class InvoiceCollection(FormCollection):
+    invoice = InvoiceForm()
     contact = ContactCollection()
     payment = PaymentCollection()
 

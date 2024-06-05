@@ -1,12 +1,6 @@
 {% extends "invoice/base/base.html" %}
 {% load i18n %}
 {% load static %}
-
-{#{% block head_script %}#}
-{#    <script type="module" src="{% static 'js/calculate.js' %}"></script>#}
-{#{% endblock %}#}
-
-
 {% block content %}
 
     <script type="module" src="{% static 'formset/js/django-formset.js' %}"></script>
@@ -15,17 +9,16 @@
     <!-- Card Header - Dropdown -->
     <div class="card-header">
         <a data-toggle="collapse" href="#contact-collection" aria-expanded="true"
-           aria-controls="collapse-example" id="invoice-collection-heading" class="d-block">
-            <label class="m-0 font-weight-bold text-primary">contact</label>
+           aria-controls="collapse-example" id="contact-collection-heading" class="d-block">
+            <label class="m-0 font-weight-bold text-primary">Contact</label>
             <i class="fa fa-chevron-down pull-left" style="font-size:16px"></i>
         </a>
     </div>
     {% load render_form from formsetify %}
-    <!-- contact COLLECTION FORM -->
-    <div id="#contact-colllection" class="card-body collapse show" >
+    <!-- CONTACT COLLECTION FORM -->
+    <div id="#contact-collection" class="card-body collapse show">
         <django-formset endpoint="{{ request.path }}" csrf-token="{{ csrf_token }}">
             {{ form_collection }}
-
             {% if add %}
                 <button type="button"
                         df-click="submit({add: true}) -> proceed">{% translate "Add" %}</button>
@@ -35,9 +28,7 @@
                 <button type="button"
                         df-click="submit({delete: true}) -> proceed">{% translate "Delete" %}</button>
             {% endif %}
-
         </django-formset>
     </div>
-
-
+    
 {% endblock %}
